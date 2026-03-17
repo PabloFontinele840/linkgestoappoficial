@@ -23,9 +23,9 @@ export async function getOrderById(id: string) {
 }
 
 export async function createOrder(payload: any, userId: string) {
-  // Simple customer creation/fetch logic for demo purposes
-  let customerId = null
-  if (payload.customer_name) {
+  let customerId = payload.customer_id || null
+
+  if (!customerId && payload.customer_name) {
     const { data: cust } = await supabase
       .from('customers')
       .insert({ user_id: userId, name: payload.customer_name, phone: payload.customer_phone })

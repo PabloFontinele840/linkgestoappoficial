@@ -15,10 +15,12 @@ import {
 } from '@/components/ui/select'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { CustomerSelector } from './CustomerSelector'
 
 export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -26,23 +28,11 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
     setLoading(true)
 
     const fd = new FormData(e.currentTarget)
-    const payload = {
-      customer_name: fd.get('customer_name'),
-      customer_phone: fd.get('customer_phone'),
-      device_brand: fd.get('device_brand'),
-      device_model: fd.get('device_model'),
-      device_color: fd.get('device_color'),
-      device_serial: fd.get('device_serial'),
-      service_type: fd.get('service_type'),
-      reported_problem: fd.get('reported_problem'),
-      device_condition: fd.getAll('condition'),
-      accessories_delivered: fd.getAll('accessory'),
-      technician_name: fd.get('technician_name'),
-      priority: fd.get('priority'),
-      estimated_value: fd.get('estimated_value'),
-      is_value_to_be_defined: fd.get('is_value_to_be_defined'),
-      warranty_days: fd.get('warranty_days'),
-    }
+    const payload = Object.fromEntries(fd.entries())
+
+    // Add arrays manually
+    payload.device_condition = fd.getAll('condition')
+    payload.accessories_delivered = fd.getAll('accessory')
 
     try {
       await createOrder(payload, user.id)
@@ -62,24 +52,30 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Customer */}
-          <div className="space-y-4">
+          <div className="space-y-4 bg-muted/20 p-4 rounded-xl border border-border/50">
             <h3 className="text-sm font-medium text-primary uppercase tracking-wider">
-              Dados do Cliente
+              Vincular Cliente
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Nome Completo</Label>
-                <Input name="customer_name" required placeholder="Ex: João da Silva" />
+              <div className="space-y-2 md:col-span-2">
+                <CustomerSelector onSelect={(id) => setSelectedCustomerId(id)} />
+                <input type="hidden" name="customer_id" value={selectedCustomerId || ''} />
               </div>
-              <div className="space-y-2">
-                <Label>Telefone / WhatsApp</Label>
-                <Input name="customer_phone" placeholder="Ex: (11) 99999-9999" />
-              </div>
+              {!selectedCustomerId && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Nome (Novo Cliente)</Label>
+                    <Input name="customer_name" placeholder="Ex: João da Silva" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Telefone / WhatsApp</Label>
+                    <Input name="customer_phone" placeholder="Ex: (11) 99999-9999" />
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
-          {/* Device */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-primary uppercase tracking-wider">
               Detalhes do Aparelho
@@ -107,24 +103,21 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
               <Textarea
                 name="reported_problem"
                 required
-                placeholder="Descreva o defeito relatado pelo cliente..."
-                className="min-h-[100px]"
+                placeholder="Descreva o defeito..."
+                className="min-h-[80px]"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
               <div className="space-y-2">
-                <Label>Condição do Aparelho</Label>
+                <Label>Condição</Label>
                 <div className="flex flex-wrap gap-4 mt-2">
                   {['Trincado', 'Riscado', 'Amassado', 'Oxidado'].map((c) => (
-                    <label
-                      key={c}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
-                    >
+                    <label key={c} className="flex items-center gap-2 text-sm">
                       <input
                         type="checkbox"
                         name="condition"
                         value={c}
-                        className="rounded border-primary text-primary focus:ring-primary bg-background"
+                        className="rounded border-primary text-primary bg-background"
                       />{' '}
                       {c}
                     </label>
@@ -132,18 +125,15 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Acessórios Deixados</Label>
+                <Label>Acessórios</Label>
                 <div className="flex flex-wrap gap-4 mt-2">
                   {['Capa', 'Chip', 'Cartão SD', 'Carregador'].map((a) => (
-                    <label
-                      key={a}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
-                    >
+                    <label key={a} className="flex items-center gap-2 text-sm">
                       <input
                         type="checkbox"
                         name="accessory"
                         value={a}
-                        className="rounded border-primary text-primary focus:ring-primary bg-background"
+                        className="rounded border-primary text-primary bg-background"
                       />{' '}
                       {a}
                     </label>
@@ -153,18 +143,15 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
             </div>
           </div>
 
-          {/* Service Info */}
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-primary uppercase tracking-wider">
-              Informações do Serviço
-            </h3>
+            <h3 className="text-sm font-medium text-primary uppercase tracking-wider">Serviço</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label>Técnico Responsável</Label>
+                <Label>Técnico</Label>
                 <Input name="technician_name" placeholder="Nome do técnico" />
               </div>
               <div className="space-y-2">
-                <Label>Tipo de Atendimento</Label>
+                <Label>Atendimento</Label>
                 <Select name="service_type" defaultValue="Balcão">
                   <SelectTrigger>
                     <SelectValue />
@@ -172,7 +159,6 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
                   <SelectContent>
                     <SelectItem value="Balcão">Balcão</SelectItem>
                     <SelectItem value="Domicílio">Domicílio</SelectItem>
-                    <SelectItem value="Retirada/Entrega">Retirada/Entrega</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -185,7 +171,6 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
                   <SelectContent>
                     <SelectItem value="Normal">Normal</SelectItem>
                     <SelectItem value="Alta">Alta</SelectItem>
-                    <SelectItem value="Urgente">Urgente</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -197,13 +182,13 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
                     type="checkbox"
                     name="is_value_to_be_defined"
                     value="true"
-                    className="rounded border-primary text-primary"
+                    className="rounded"
                   />{' '}
                   A definir
                 </label>
               </div>
               <div className="space-y-2">
-                <Label>Garantia (Dias)</Label>
+                <Label>Garantia</Label>
                 <Select name="warranty_days" defaultValue="90">
                   <SelectTrigger>
                     <SelectValue />
@@ -211,9 +196,7 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
                   <SelectContent>
                     <SelectItem value="0">Sem garantia</SelectItem>
                     <SelectItem value="30">30 dias</SelectItem>
-                    <SelectItem value="60">60 dias</SelectItem>
                     <SelectItem value="90">90 dias</SelectItem>
-                    <SelectItem value="180">180 dias</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -225,8 +208,7 @@ export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
               Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-              Criar Ordem de Serviço
+              {loading && <Loader2 className="mr-2 size-4 animate-spin" />} Criar Ordem
             </Button>
           </div>
         </form>

@@ -9,6 +9,8 @@ import Layout from './components/Layout'
 import Index from './pages/Index'
 import Settings from './pages/Settings'
 import Orders from './pages/Orders'
+import Customers from './pages/Customers'
+import Suppliers from './pages/Suppliers'
 import Construction from './pages/Construction'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
@@ -16,7 +18,7 @@ import SignUp from './pages/SignUp'
 import { NAV_ITEMS } from './lib/constants'
 
 const App = () => {
-  const implementedRoutes = ['/', '/configuracoes', '/ordens']
+  const implementedRoutes = ['/', '/configuracoes', '/ordens', '/clientes', '/fornecedores']
 
   return (
     <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
@@ -34,6 +36,8 @@ const App = () => {
                   <Route path="/" element={<Index />} />
                   <Route path="/configuracoes" element={<Settings />} />
                   <Route path="/ordens" element={<Orders />} />
+                  <Route path="/clientes" element={<Customers />} />
+                  <Route path="/fornecedores" element={<Suppliers />} />
 
                   {NAV_ITEMS.filter((item) => !implementedRoutes.includes(item.path)).map(
                     (item) => (

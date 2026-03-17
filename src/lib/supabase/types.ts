@@ -9,6 +9,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      business_settings: {
+        Row: {
+          address: string | null
+          business_name: string
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          phone: string | null
+          theme_color: string
+          theme_mode: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          business_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          phone?: string | null
+          theme_color?: string
+          theme_mode?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          phone?: string | null
+          theme_color?: string
+          theme_mode?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string
@@ -518,6 +560,18 @@ export const Constants = {
 // --- COLUMN TYPES (actual PostgreSQL types) ---
 // Use this to know the real database type when writing migrations.
 // "string" in TypeScript types above may be uuid, text, varchar, timestamptz, etc.
+// Table: business_settings
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   business_name: text (not null, default: 'Minha Assistência'::text)
+//   phone: text (nullable)
+//   address: text (nullable)
+//   description: text (nullable)
+//   logo_url: text (nullable)
+//   theme_mode: text (not null, default: 'dark'::text)
+//   theme_color: text (not null, default: 'purple'::text)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
 // Table: customers
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -610,6 +664,10 @@ export const Constants = {
 //   updated_at: timestamp with time zone (not null, default: now())
 
 // --- CONSTRAINTS ---
+// Table: business_settings
+//   PRIMARY KEY business_settings_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY business_settings_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+//   UNIQUE business_settings_user_id_key: UNIQUE (user_id)
 // Table: customers
 //   PRIMARY KEY customers_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY customers_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
@@ -648,6 +706,14 @@ export const Constants = {
 //   FOREIGN KEY transactions_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 
 // --- ROW LEVEL SECURITY POLICIES ---
+// Table: business_settings
+//   Policy "Users can insert own settings" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own settings" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own settings" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: customers
 //   Policy "Users can access own customers" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
@@ -686,6 +752,10 @@ export const Constants = {
 //   BEGIN
 //     INSERT INTO public.profiles (id, full_name, store_name)
 //     VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name', 'Minha Assistência');
+//
+//     INSERT INTO public.business_settings (user_id, business_name)
+//     VALUES (NEW.id, 'Minha Assistência');
+//
 //     RETURN NEW;
 //   END;
 //   $function$
@@ -754,5 +824,7 @@ export const Constants = {
 //   on_os_status_change: CREATE TRIGGER on_os_status_change BEFORE UPDATE ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_finalized()
 
 // --- INDEXES ---
+// Table: business_settings
+//   CREATE UNIQUE INDEX business_settings_user_id_key ON public.business_settings USING btree (user_id)
 // Table: monthly_goals
 //   CREATE UNIQUE INDEX monthly_goals_user_id_month_year_key ON public.monthly_goals USING btree (user_id, month_year)
