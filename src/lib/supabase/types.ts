@@ -53,29 +53,41 @@ export type Database = {
       }
       customers: {
         Row: {
+          address: string | null
+          cpf: string | null
           created_at: string
           email: string | null
           id: string
           name: string
+          notes: string | null
           phone: string | null
+          status: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          address?: string | null
+          cpf?: string | null
           created_at?: string
           email?: string | null
           id?: string
           name: string
+          notes?: string | null
           phone?: string | null
+          status?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          address?: string | null
+          cpf?: string | null
           created_at?: string
           email?: string | null
           id?: string
           name?: string
+          notes?: string | null
           phone?: string | null
+          status?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -374,6 +386,54 @@ export type Database = {
         }
         Relationships: []
       }
+      suppliers: {
+        Row: {
+          city: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          notes: string | null
+          phone: string | null
+          specialty: string | null
+          state: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+          whatsapp: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          notes?: string | null
+          phone?: string | null
+          specialty?: string | null
+          state?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+          whatsapp?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          notes?: string | null
+          phone?: string | null
+          specialty?: string | null
+          state?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
@@ -580,6 +640,10 @@ export const Constants = {
 //   phone: text (nullable)
 //   created_at: timestamp with time zone (not null, default: now())
 //   updated_at: timestamp with time zone (not null, default: now())
+//   cpf: text (nullable)
+//   address: text (nullable)
+//   status: text (nullable, default: 'Ativo'::text)
+//   notes: text (nullable)
 // Table: monthly_goals
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -651,6 +715,20 @@ export const Constants = {
 //   price: numeric (not null, default: 0)
 //   created_at: timestamp with time zone (not null, default: now())
 //   updated_at: timestamp with time zone (not null, default: now())
+// Table: suppliers
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   name: text (nullable)
+//   phone: text (nullable)
+//   whatsapp: text (nullable)
+//   email: text (nullable)
+//   city: text (nullable)
+//   state: text (nullable)
+//   specialty: text (nullable, default: 'Geral'::text)
+//   status: text (nullable, default: 'Ativo'::text)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
 // Table: transactions
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -699,6 +777,9 @@ export const Constants = {
 // Table: services
 //   PRIMARY KEY services_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY services_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: suppliers
+//   PRIMARY KEY suppliers_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY suppliers_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: transactions
 //   PRIMARY KEY transactions_pkey: PRIMARY KEY (id)
 //   CHECK transactions_status_check: CHECK ((status = ANY (ARRAY['Pendente'::text, 'Pago'::text])))
@@ -737,6 +818,9 @@ export const Constants = {
 //     USING: (user_id = auth.uid())
 // Table: services
 //   Policy "Users can access own services" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+// Table: suppliers
+//   Policy "Users can access own suppliers" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
 // Table: transactions
 //   Policy "Users can access own transactions" (ALL, PERMISSIVE) roles={authenticated}

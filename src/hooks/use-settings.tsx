@@ -119,11 +119,14 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     if (!user) return { error: 'No user authenticated' }
 
     const { id, ...dataToSave } = settings
-    const { error } = await supabase.from('business_settings').upsert({
-      user_id: user.id,
-      ...dataToSave,
-      updated_at: new Date().toISOString(),
-    })
+    const { error } = await supabase.from('business_settings').upsert(
+      {
+        user_id: user.id,
+        ...dataToSave,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id' },
+    )
 
     return { error }
   }

@@ -38,7 +38,7 @@ export default function Settings() {
     setIsSaving(false)
 
     if (error) {
-      toast.error('Erro ao salvar as configurações.')
+      toast.error(error.message || 'Erro ao salvar as configurações.')
     } else {
       toast.success('Configurações salvas com sucesso!')
     }
