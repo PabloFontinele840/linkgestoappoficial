@@ -1,0 +1,236 @@
+import { useState } from 'react'
+import { useAuth } from '@/hooks/use-auth'
+import { createOrder } from '@/services/orders'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+
+export function NewOrderForm({ onCreated }: { onCreated: () => void }) {
+  const { user } = useAuth()
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!user) return
+    setLoading(true)
+
+    const fd = new FormData(e.currentTarget)
+    const payload = {
+      customer_name: fd.get('customer_name'),
+      customer_phone: fd.get('customer_phone'),
+      device_brand: fd.get('device_brand'),
+      device_model: fd.get('device_model'),
+      device_color: fd.get('device_color'),
+      device_serial: fd.get('device_serial'),
+      service_type: fd.get('service_type'),
+      reported_problem: fd.get('reported_problem'),
+      device_condition: fd.getAll('condition'),
+      accessories_delivered: fd.getAll('accessory'),
+      technician_name: fd.get('technician_name'),
+      priority: fd.get('priority'),
+      estimated_value: fd.get('estimated_value'),
+      is_value_to_be_defined: fd.get('is_value_to_be_defined'),
+      warranty_days: fd.get('warranty_days'),
+    }
+
+    try {
+      await createOrder(payload, user.id)
+      toast.success('Ordem de serviço criada com sucesso!')
+      onCreated()
+    } catch (error: any) {
+      toast.error('Erro ao criar OS', { description: error.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Card className="border-border/50 bg-card/40 backdrop-blur-sm shadow-sm max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle>Nova Ordem de Serviço</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Customer */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-primary uppercase tracking-wider">
+              Dados do Cliente
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Nome Completo</Label>
+                <Input name="customer_name" required placeholder="Ex: João da Silva" />
+              </div>
+              <div className="space-y-2">
+                <Label>Telefone / WhatsApp</Label>
+                <Input name="customer_phone" placeholder="Ex: (11) 99999-9999" />
+              </div>
+            </div>
+          </div>
+
+          {/* Device */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-primary uppercase tracking-wider">
+              Detalhes do Aparelho
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <Label>Marca</Label>
+                <Input name="device_brand" required placeholder="Ex: Apple" />
+              </div>
+              <div className="space-y-2">
+                <Label>Modelo</Label>
+                <Input name="device_model" required placeholder="Ex: iPhone 13" />
+              </div>
+              <div className="space-y-2">
+                <Label>Cor</Label>
+                <Input name="device_color" placeholder="Ex: Azul" />
+              </div>
+              <div className="space-y-2">
+                <Label>IMEI / Serial</Label>
+                <Input name="device_serial" placeholder="Opcional" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Problema Relatado</Label>
+              <Textarea
+                name="reported_problem"
+                required
+                placeholder="Descreva o defeito relatado pelo cliente..."
+                className="min-h-[100px]"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+              <div className="space-y-2">
+                <Label>Condição do Aparelho</Label>
+                <div className="flex flex-wrap gap-4 mt-2">
+                  {['Trincado', 'Riscado', 'Amassado', 'Oxidado'].map((c) => (
+                    <label
+                      key={c}
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                    >
+                      <input
+                        type="checkbox"
+                        name="condition"
+                        value={c}
+                        className="rounded border-primary text-primary focus:ring-primary bg-background"
+                      />{' '}
+                      {c}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Acessórios Deixados</Label>
+                <div className="flex flex-wrap gap-4 mt-2">
+                  {['Capa', 'Chip', 'Cartão SD', 'Carregador'].map((a) => (
+                    <label
+                      key={a}
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                    >
+                      <input
+                        type="checkbox"
+                        name="accessory"
+                        value={a}
+                        className="rounded border-primary text-primary focus:ring-primary bg-background"
+                      />{' '}
+                      {a}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Service Info */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-primary uppercase tracking-wider">
+              Informações do Serviço
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>Técnico Responsável</Label>
+                <Input name="technician_name" placeholder="Nome do técnico" />
+              </div>
+              <div className="space-y-2">
+                <Label>Tipo de Atendimento</Label>
+                <Select name="service_type" defaultValue="Balcão">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Balcão">Balcão</SelectItem>
+                    <SelectItem value="Domicílio">Domicílio</SelectItem>
+                    <SelectItem value="Retirada/Entrega">Retirada/Entrega</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Prioridade</Label>
+                <Select name="priority" defaultValue="Normal">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Alta">Alta</SelectItem>
+                    <SelectItem value="Urgente">Urgente</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Valor Estimado (R$)</Label>
+                <Input type="number" step="0.01" name="estimated_value" defaultValue="0.00" />
+                <label className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+                  <input
+                    type="checkbox"
+                    name="is_value_to_be_defined"
+                    value="true"
+                    className="rounded border-primary text-primary"
+                  />{' '}
+                  A definir
+                </label>
+              </div>
+              <div className="space-y-2">
+                <Label>Garantia (Dias)</Label>
+                <Select name="warranty_days" defaultValue="90">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Sem garantia</SelectItem>
+                    <SelectItem value="30">30 dias</SelectItem>
+                    <SelectItem value="60">60 dias</SelectItem>
+                    <SelectItem value="90">90 dias</SelectItem>
+                    <SelectItem value="180">180 dias</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-4 pt-4 border-t border-border/50">
+            <Button type="button" variant="ghost" onClick={onCreated}>
+              Cancelar
+            </Button>
+            <Button type="submit" disabled={loading}>
+              {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+              Criar Ordem de Serviço
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}

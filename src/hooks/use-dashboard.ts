@@ -52,7 +52,6 @@ export function useDashboardData() {
         const safeTxs = transactions || []
         const safeProducts = products || []
 
-        // KPI Calculations
         const currentMonthTxs = safeTxs.filter((t) => new Date(t.date) >= startCurrentMonth)
         const revenue = currentMonthTxs
           .filter((t) => t.type === 'income')
@@ -63,7 +62,8 @@ export function useDashboardData() {
         const profit = revenue - expenses
 
         const activeOrdersCount = safeOrders.filter(
-          (o) => !['Finalizado', 'Cancelado'].includes(o.status),
+          (o) =>
+            !['Finalizada', 'Entregue', 'Cancelada', 'Finalizado', 'Cancelado'].includes(o.status),
         ).length
         const uniqueCustomers = new Set(
           safeOrders
@@ -71,7 +71,6 @@ export function useDashboardData() {
             .map((o) => o.customer_id),
         ).size
 
-        // Chart Data
         const daysInMonth = getDaysInMonth(now)
         const chartData = Array.from({ length: daysInMonth }).map((_, i) => {
           const dayStr = (i + 1).toString().padStart(2, '0')
@@ -89,23 +88,23 @@ export function useDashboardData() {
           return { name: dayStr, atual, anterior }
         })
 
-        // Daily Summary
         const createdToday = safeOrders.filter((o) => isToday(new Date(o.created_at))).length
         const finishedToday = safeOrders.filter(
-          (o) => o.status === 'Finalizado' && isToday(new Date(o.updated_at)),
+          (o) =>
+            ['Finalizada', 'Entregue', 'Finalizado'].includes(o.status) &&
+            isToday(new Date(o.updated_at)),
         )
         const revenueToday = finishedToday.reduce((sum, o) => sum + Number(o.value), 0)
 
-        // Alerts Logic
         const lowStock = safeProducts.filter((p) => p.stock_quantity <= p.min_stock_level)
         const pendingTxs = safeTxs.filter((t) => t.status === 'Pendente')
         const overdueOrders = safeOrders.filter(
           (o) =>
-            !['Finalizado', 'Cancelado'].includes(o.status) &&
-            new Date(o.created_at) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+            !['Finalizada', 'Entregue', 'Cancelada', 'Finalizado', 'Cancelado'].includes(
+              o.status,
+            ) && new Date(o.created_at) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         )
 
-        // Monthly Ranking Logic (Current Month Only)
         const currentMonthOrders = safeOrders.filter(
           (o) => new Date(o.created_at) >= startCurrentMonth,
         )
