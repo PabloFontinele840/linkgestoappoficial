@@ -27,7 +27,7 @@ export default function Suppliers() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:w-[450px] lg:grid-cols-3 mb-6 bg-card border border-border/50">
+        <TabsList className="inline-flex w-auto mb-6 bg-card border border-border/50">
           <TabsTrigger value="list" onClick={() => setSelectedId(null)}>
             Lista de Fornecedores
           </TabsTrigger>

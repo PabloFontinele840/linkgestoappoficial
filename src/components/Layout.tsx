@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { Bell, LogOut, Smartphone } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { useSettings } from '@/hooks/use-settings'
 import {
@@ -17,7 +17,6 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { Separator } from '@/components/ui/separator'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { NAV_ITEMS } from '@/lib/constants'
 
@@ -28,8 +27,6 @@ export default function Layout() {
 
   const handleSignOut = () => signOut()
 
-  const defaultLogo = 'https://img.usecurling.com/i?q=tech%20store&shape=fill&color=violet'
-  const displayLogo = settings?.logo_url || defaultLogo
   const displayName = settings?.business_name || profile?.store_name || 'Minha Assistência'
 
   return (
@@ -37,9 +34,15 @@ export default function Layout() {
       <Sidebar className="border-r border-border/50">
         <SidebarHeader className="p-4">
           <Link to="/" className="flex items-center gap-2 px-2 transition-opacity hover:opacity-80">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)]">
-              <Smartphone className="size-5" />
-            </div>
+            {settings?.logo_url ? (
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden bg-white shadow-sm border border-border/50">
+                <img src={settings.logo_url} alt="Logo" className="w-full h-full object-contain" />
+              </div>
+            ) : (
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg shadow-[0_0_15px_rgba(var(--primary),0.5)]">
+                {displayName.substring(0, 1).toUpperCase()}
+              </div>
+            )}
             <span className="text-xl font-bold tracking-tight truncate pr-2" title={displayName}>
               {displayName}
             </span>
@@ -69,19 +72,9 @@ export default function Layout() {
         </SidebarContent>
         <SidebarFooter className="p-4">
           <div className="flex items-center justify-between rounded-xl bg-card p-2 border border-border/50">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-8 w-8 rounded-md">
-                <AvatarImage src={`https://img.usecurling.com/ppl/thumbnail?seed=${user?.id}`} />
-                <AvatarFallback className="rounded-md">
-                  {profile?.full_name?.substring(0, 2).toUpperCase() || 'AD'}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col text-sm leading-tight">
-                <span className="font-semibold truncate w-24">
-                  {profile?.full_name || 'Usuário'}
-                </span>
-                <span className="text-xs text-muted-foreground truncate w-24">{user?.email}</span>
-              </div>
+            <div className="flex flex-col text-sm leading-tight pl-2">
+              <span className="font-semibold truncate w-32">{profile?.full_name || 'Usuário'}</span>
+              <span className="text-xs text-muted-foreground truncate w-32">{user?.email}</span>
             </div>
             <Button
               variant="ghost"
@@ -107,21 +100,11 @@ export default function Layout() {
               <span className="text-muted-foreground hidden sm:inline-block">por LinkGestor</span>
             </div>
             <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground relative"
+              <Link
+                to="/configuracoes"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Bell className="size-5" />
-                <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background" />
-              </Button>
-              <Link to="/configuracoes">
-                <Avatar className="h-8 w-8 rounded-md border border-border/50 cursor-pointer hover:opacity-80 transition-opacity">
-                  <AvatarImage src={displayLogo} className="object-cover" />
-                  <AvatarFallback className="rounded-md">
-                    {displayName.substring(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                Configurações
               </Link>
             </div>
           </div>

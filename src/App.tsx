@@ -15,6 +15,8 @@ import Inventory from './pages/Inventory'
 import Finance from './pages/Finance'
 import Sales from './pages/Sales'
 import Reports from './pages/Reports'
+import AutoServiceAdmin from './pages/AutoServiceAdmin'
+import PublicPortal from './pages/PublicPortal'
 import Construction from './pages/Construction'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
@@ -32,6 +34,7 @@ const App = () => {
     '/financeiro',
     '/vendas',
     '/relatorios',
+    '/autoatendimento',
   ]
 
   return (
@@ -44,6 +47,7 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/check/:slug" element={<PublicPortal />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
@@ -56,6 +60,7 @@ const App = () => {
                   <Route path="/financeiro" element={<Finance />} />
                   <Route path="/vendas" element={<Sales />} />
                   <Route path="/relatorios" element={<Reports />} />
+                  <Route path="/autoatendimento" element={<AutoServiceAdmin />} />
 
                   {NAV_ITEMS.filter((item) => !implementedRoutes.includes(item.path)).map(
                     (item) => (

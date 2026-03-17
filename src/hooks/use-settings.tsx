@@ -14,6 +14,9 @@ export interface BusinessSettings {
   logo_url: string
   theme_mode: ThemeMode
   theme_color: ThemeColor
+  slug?: string
+  auto_active?: boolean
+  whatsapp_number?: string
 }
 
 const DEFAULT_SETTINGS: BusinessSettings = {
@@ -24,6 +27,9 @@ const DEFAULT_SETTINGS: BusinessSettings = {
   logo_url: '',
   theme_mode: 'dark',
   theme_color: 'purple',
+  slug: '',
+  auto_active: false,
+  whatsapp_number: '',
 }
 
 const COLOR_MAP: Record<ThemeColor, string> = {
@@ -80,6 +86,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
           logo_url: data.logo_url || '',
           theme_mode: (data.theme_mode as ThemeMode) || 'dark',
           theme_color: (data.theme_color as ThemeColor) || 'purple',
+          slug: data.slug || '',
+          auto_active: data.auto_active || false,
+          whatsapp_number: data.whatsapp_number || '',
         })
       }
       setLoading(false)

@@ -97,6 +97,7 @@ export type Database = {
         Row: {
           amount: number
           category: string | null
+          classification: string
           created_at: string
           description: string
           id: string
@@ -112,6 +113,7 @@ export type Database = {
         Insert: {
           amount?: number
           category?: string | null
+          classification?: string
           created_at?: string
           description: string
           id?: string
@@ -127,6 +129,7 @@ export type Database = {
         Update: {
           amount?: number
           category?: string | null
+          classification?: string
           created_at?: string
           description?: string
           id?: string
@@ -339,6 +342,106 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      sale_items: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          quantity: number
+          sale_id: string
+          subtotal: number
+          type: string
+          unit_price: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          quantity?: number
+          sale_id: string
+          subtotal?: number
+          type: string
+          unit_price?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          quantity?: number
+          sale_id?: string
+          subtotal?: number
+          type?: string
+          unit_price?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sale_items_sale_id_fkey'
+            columns: ['sale_id']
+            isOneToOne: false
+            referencedRelation: 'sales'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          client_id: string | null
+          client_name: string
+          created_at: string
+          discount: number
+          final_amount: number
+          id: string
+          notes: string | null
+          payment_method: string | null
+          sale_date: string
+          status: string
+          total_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id?: string | null
+          client_name: string
+          created_at?: string
+          discount?: number
+          final_amount?: number
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_date?: string
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string | null
+          client_name?: string
+          created_at?: string
+          discount?: number
+          final_amount?: number
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_date?: string
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sales_client_id_fkey'
+            columns: ['client_id']
+            isOneToOne: false
+            referencedRelation: 'customers'
+            referencedColumns: ['id']
+          },
+        ]
       }
       service_order_attachments: {
         Row: {
@@ -815,6 +918,7 @@ export const Constants = {
 //   notes: text (nullable)
 //   created_at: timestamp with time zone (not null, default: now())
 //   updated_at: timestamp with time zone (not null, default: now())
+//   classification: text (not null, default: 'Variável'::text)
 // Table: inventory_items
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -864,6 +968,30 @@ export const Constants = {
 //   store_name: text (nullable)
 //   logo_url: text (nullable)
 //   theme_color: text (nullable, default: 'Roxo'::text)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
+// Table: sale_items
+//   id: uuid (not null, default: gen_random_uuid())
+//   sale_id: uuid (not null)
+//   user_id: uuid (not null)
+//   name: text (not null)
+//   type: text (not null)
+//   quantity: integer (not null, default: 1)
+//   unit_price: numeric (not null, default: 0)
+//   subtotal: numeric (not null, default: 0)
+//   created_at: timestamp with time zone (not null, default: now())
+// Table: sales
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   client_id: uuid (nullable)
+//   client_name: text (not null)
+//   total_amount: numeric (not null, default: 0)
+//   discount: numeric (not null, default: 0)
+//   final_amount: numeric (not null, default: 0)
+//   payment_method: text (nullable)
+//   status: text (not null, default: 'Concluída'::text)
+//   sale_date: date (not null, default: CURRENT_DATE)
+//   notes: text (nullable)
 //   created_at: timestamp with time zone (not null, default: now())
 //   updated_at: timestamp with time zone (not null, default: now())
 // Table: service_order_attachments
@@ -971,6 +1099,15 @@ export const Constants = {
 // Table: profiles
 //   FOREIGN KEY profiles_id_fkey: FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE
 //   PRIMARY KEY profiles_pkey: PRIMARY KEY (id)
+// Table: sale_items
+//   PRIMARY KEY sale_items_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY sale_items_sale_id_fkey: FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE
+//   CHECK sale_items_type_check: CHECK ((type = ANY (ARRAY['Produto'::text, 'Serviço'::text])))
+//   FOREIGN KEY sale_items_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: sales
+//   FOREIGN KEY sales_client_id_fkey: FOREIGN KEY (client_id) REFERENCES customers(id) ON DELETE SET NULL
+//   PRIMARY KEY sales_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY sales_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: service_order_attachments
 //   PRIMARY KEY service_order_attachments_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY service_order_attachments_service_order_id_fkey: FOREIGN KEY (service_order_id) REFERENCES service_orders(id) ON DELETE CASCADE
@@ -1049,6 +1186,26 @@ export const Constants = {
 // Table: profiles
 //   Policy "Users can access own profile" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (id = auth.uid())
+// Table: sale_items
+//   Policy "Users can delete own sale items" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own sale items" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own sale items" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own sale items" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: sales
+//   Policy "Users can delete own sales" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own sales" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own sales" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own sales" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: service_order_attachments
 //   Policy "Users can access own attachments" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
