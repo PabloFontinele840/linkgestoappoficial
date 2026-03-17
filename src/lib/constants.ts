@@ -7,8 +7,6 @@ import {
   DollarSign,
   ShoppingCart,
   BarChart,
-  Calendar,
-  Phone,
   Bot,
   Settings,
 } from 'lucide-react'
@@ -22,8 +20,6 @@ export const NAV_ITEMS = [
   { title: 'Financeiro', icon: DollarSign, path: '/financeiro' },
   { title: 'Vendas', icon: ShoppingCart, path: '/vendas' },
   { title: 'Relatórios', icon: BarChart, path: '/relatorios' },
-  { title: 'Agendamentos', icon: Calendar, path: '/agendamentos' },
-  { title: 'Autoatendimento', icon: Phone, path: '/autoatendimento' },
   { title: 'Inteligência Artificial', icon: Bot, path: '/ia' },
   { title: 'Configurações', icon: Settings, path: '/configuracoes' },
 ]

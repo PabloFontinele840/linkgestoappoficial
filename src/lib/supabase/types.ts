@@ -9,45 +9,185 @@ export type Database = {
   }
   public: {
     Tables: {
+      auto_brands: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      auto_defects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      auto_models: {
+        Row: {
+          brand_id: string
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          brand_id: string
+          created_at?: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'auto_models_brand_id_fkey'
+            columns: ['brand_id']
+            isOneToOne: false
+            referencedRelation: 'auto_brands'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      auto_services: {
+        Row: {
+          created_at: string
+          defect_id: string
+          estimated_time: string | null
+          id: string
+          model_id: string
+          notes: string | null
+          price: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          defect_id: string
+          estimated_time?: string | null
+          id?: string
+          model_id: string
+          notes?: string | null
+          price?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          defect_id?: string
+          estimated_time?: string | null
+          id?: string
+          model_id?: string
+          notes?: string | null
+          price?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'auto_services_defect_id_fkey'
+            columns: ['defect_id']
+            isOneToOne: false
+            referencedRelation: 'auto_defects'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'auto_services_model_id_fkey'
+            columns: ['model_id']
+            isOneToOne: false
+            referencedRelation: 'auto_models'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       business_settings: {
         Row: {
           address: string | null
+          auto_active: boolean | null
           business_name: string
           created_at: string
           description: string | null
           id: string
           logo_url: string | null
           phone: string | null
+          slug: string | null
           theme_color: string
           theme_mode: string
           updated_at: string
           user_id: string
+          whatsapp_number: string | null
         }
         Insert: {
           address?: string | null
+          auto_active?: boolean | null
           business_name?: string
           created_at?: string
           description?: string | null
           id?: string
           logo_url?: string | null
           phone?: string | null
+          slug?: string | null
           theme_color?: string
           theme_mode?: string
           updated_at?: string
           user_id: string
+          whatsapp_number?: string | null
         }
         Update: {
           address?: string | null
+          auto_active?: boolean | null
           business_name?: string
           created_at?: string
           description?: string | null
           id?: string
           logo_url?: string | null
           phone?: string | null
+          slug?: string | null
           theme_color?: string
           theme_mode?: string
           updated_at?: string
           user_id?: string
+          whatsapp_number?: string | null
         }
         Relationships: []
       }
@@ -880,6 +1020,34 @@ export const Constants = {
 // --- COLUMN TYPES (actual PostgreSQL types) ---
 // Use this to know the real database type when writing migrations.
 // "string" in TypeScript types above may be uuid, text, varchar, timestamptz, etc.
+// Table: auto_brands
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   name: text (not null)
+//   logo_url: text (nullable)
+//   is_active: boolean (nullable, default: true)
+//   created_at: timestamp with time zone (not null, default: now())
+// Table: auto_defects
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   name: text (not null)
+//   description: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+// Table: auto_models
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   brand_id: uuid (not null)
+//   name: text (not null)
+//   created_at: timestamp with time zone (not null, default: now())
+// Table: auto_services
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   model_id: uuid (not null)
+//   defect_id: uuid (not null)
+//   price: numeric (nullable)
+//   estimated_time: text (nullable)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
 // Table: business_settings
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -892,6 +1060,9 @@ export const Constants = {
 //   theme_color: text (not null, default: 'purple'::text)
 //   created_at: timestamp with time zone (not null, default: now())
 //   updated_at: timestamp with time zone (not null, default: now())
+//   slug: text (nullable)
+//   auto_active: boolean (nullable, default: false)
+//   whatsapp_number: text (nullable)
 // Table: customers
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -1068,8 +1239,25 @@ export const Constants = {
 //   updated_at: timestamp with time zone (not null, default: now())
 
 // --- CONSTRAINTS ---
+// Table: auto_brands
+//   PRIMARY KEY auto_brands_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY auto_brands_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: auto_defects
+//   PRIMARY KEY auto_defects_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY auto_defects_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: auto_models
+//   FOREIGN KEY auto_models_brand_id_fkey: FOREIGN KEY (brand_id) REFERENCES auto_brands(id) ON DELETE CASCADE
+//   PRIMARY KEY auto_models_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY auto_models_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: auto_services
+//   FOREIGN KEY auto_services_defect_id_fkey: FOREIGN KEY (defect_id) REFERENCES auto_defects(id) ON DELETE CASCADE
+//   UNIQUE auto_services_model_id_defect_id_key: UNIQUE (model_id, defect_id)
+//   FOREIGN KEY auto_services_model_id_fkey: FOREIGN KEY (model_id) REFERENCES auto_models(id) ON DELETE CASCADE
+//   PRIMARY KEY auto_services_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY auto_services_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: business_settings
 //   PRIMARY KEY business_settings_pkey: PRIMARY KEY (id)
+//   UNIQUE business_settings_slug_key: UNIQUE (slug)
 //   FOREIGN KEY business_settings_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 //   UNIQUE business_settings_user_id_key: UNIQUE (user_id)
 // Table: customers
@@ -1136,7 +1324,33 @@ export const Constants = {
 //   FOREIGN KEY transactions_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 
 // --- ROW LEVEL SECURITY POLICIES ---
+// Table: auto_brands
+//   Policy "Public select brands" (SELECT, PERMISSIVE) roles={public}
+//     USING: (is_active = true)
+//   Policy "Users can manage their brands" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: auto_defects
+//   Policy "Public select defects" (SELECT, PERMISSIVE) roles={public}
+//     USING: true
+//   Policy "Users can manage their defects" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: auto_models
+//   Policy "Public select models" (SELECT, PERMISSIVE) roles={public}
+//     USING: true
+//   Policy "Users can manage their models" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: auto_services
+//   Policy "Public select services" (SELECT, PERMISSIVE) roles={public}
+//     USING: true
+//   Policy "Users can manage their services" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: business_settings
+//   Policy "Public select settings" (SELECT, PERMISSIVE) roles={public}
+//     USING: (auto_active = true)
 //   Policy "Users can insert own settings" (INSERT, PERMISSIVE) roles={authenticated}
 //     WITH CHECK: (user_id = auth.uid())
 //   Policy "Users can select own settings" (SELECT, PERMISSIVE) roles={authenticated}
@@ -1330,7 +1544,10 @@ export const Constants = {
 //   on_os_status_change: CREATE TRIGGER on_os_status_change BEFORE UPDATE ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_finalized()
 
 // --- INDEXES ---
+// Table: auto_services
+//   CREATE UNIQUE INDEX auto_services_model_id_defect_id_key ON public.auto_services USING btree (model_id, defect_id)
 // Table: business_settings
+//   CREATE UNIQUE INDEX business_settings_slug_key ON public.business_settings USING btree (slug)
 //   CREATE UNIQUE INDEX business_settings_user_id_key ON public.business_settings USING btree (user_id)
 // Table: monthly_goals
 //   CREATE UNIQUE INDEX monthly_goals_user_id_month_year_key ON public.monthly_goals USING btree (user_id, month_year)
