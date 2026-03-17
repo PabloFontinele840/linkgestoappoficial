@@ -6,7 +6,56 @@
 
 @layer base {
   :root {
-    /* Deep dark theme for LinkGestor */
+    /* Light Mode Default Variables */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 262 83% 58%; /* Default Purple */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 262 83% 58%;
+
+    /* Chart colors remain consistent or adjust via CSS later */
+    --chart-1: 262 83% 58%;
+    --chart-2: 217 91% 60%;
+    --chart-3: 152 76% 40%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 0 84% 60%;
+  }
+
+  .dark {
+    /* Dark Mode Variables matching LinkGestor spec */
     --background: 240 21% 7%; /* #0F0F17 */
     --foreground: 0 0% 100%;
 
@@ -16,7 +65,7 @@
     --popover: 240 16% 12%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 262 83% 58%; /* #7C3AED */
+    --primary: 262 83% 58%; /* Controlled by theme picker */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 11% 20%;
@@ -25,7 +74,7 @@
     --muted: 240 11% 20%;
     --muted-foreground: 240 5% 65%; /* #A1A1AA */
 
-    --accent: 262 83% 58%;
+    --accent: 240 11% 20%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -35,8 +84,6 @@
     --input: 240 11% 20%;
     --ring: 262 83% 58%;
 
-    --radius: 0.75rem; /* 12px for cards/buttons */
-
     --sidebar-background: 240 21% 7%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 262 83% 58%;
@@ -45,17 +92,10 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 240 11% 20%;
     --sidebar-ring: 262 83% 58%;
-
-    --chart-1: 262 83% 58%;
-    --chart-2: 217 91% 60%;
-    --chart-3: 152 76% 40%;
-    --chart-4: 43 96% 56%;
-    --chart-5: 0 84% 60%;
   }
 
-  /* Force dark mode aesthetic globally */
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/30;
+    @apply bg-background text-foreground antialiased selection:bg-primary/30 transition-colors duration-300;
     font-family: 'Inter', sans-serif;
   }
 
@@ -85,10 +125,10 @@
     }
   }
   .animate-fade-in {
-    animation: fade-in 0.4s ease-out;
+    animation: fade-in 0.4s ease-out forwards;
   }
   .animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out;
+    animation: fade-in-up 0.5s ease-out forwards;
   }
   .glass-header {
     @apply bg-background/80 backdrop-blur-md border-b border-border/50;

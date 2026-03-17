@@ -3,6 +3,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider } from '@/hooks/use-auth'
+import { SettingsProvider } from '@/hooks/use-settings'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import Layout from './components/Layout'
 import Index from './pages/Index'
@@ -20,27 +21,31 @@ const App = () => {
   return (
     <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
+        <SettingsProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Index />} />
-                <Route path="/configuracoes" element={<Settings />} />
-                <Route path="/ordens" element={<Orders />} />
+              <Route element={<ProtectedRoute />}>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/configuracoes" element={<Settings />} />
+                  <Route path="/ordens" element={<Orders />} />
 
-                {NAV_ITEMS.filter((item) => !implementedRoutes.includes(item.path)).map((item) => (
-                  <Route key={item.path} path={item.path} element={<Construction />} />
-                ))}
+                  {NAV_ITEMS.filter((item) => !implementedRoutes.includes(item.path)).map(
+                    (item) => (
+                      <Route key={item.path} path={item.path} element={<Construction />} />
+                    ),
+                  )}
+                </Route>
               </Route>
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </TooltipProvider>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </TooltipProvider>
+        </SettingsProvider>
       </AuthProvider>
     </BrowserRouter>
   )

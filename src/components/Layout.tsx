@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { Bell, LogOut, Smartphone } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
+import { useSettings } from '@/hooks/use-settings'
 import {
   Sidebar,
   SidebarContent,
@@ -23,18 +24,25 @@ import { NAV_ITEMS } from '@/lib/constants'
 export default function Layout() {
   const location = useLocation()
   const { user, profile, signOut } = useAuth()
+  const { settings } = useSettings()
 
   const handleSignOut = () => signOut()
+
+  const defaultLogo = 'https://img.usecurling.com/i?q=tech%20store&shape=fill&color=violet'
+  const displayLogo = settings?.logo_url || defaultLogo
+  const displayName = settings?.business_name || profile?.store_name || 'Minha Assistência'
 
   return (
     <SidebarProvider>
       <Sidebar className="border-r border-border/50">
         <SidebarHeader className="p-4">
           <Link to="/" className="flex items-center gap-2 px-2 transition-opacity hover:opacity-80">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_15px_rgba(124,58,237,0.5)]">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)]">
               <Smartphone className="size-5" />
             </div>
-            <span className="text-xl font-bold tracking-tight">LinkGestor</span>
+            <span className="text-xl font-bold tracking-tight truncate pr-2" title={displayName}>
+              {displayName}
+            </span>
           </Link>
         </SidebarHeader>
         <SidebarContent>
@@ -93,10 +101,10 @@ export default function Layout() {
           <div className="flex flex-1 items-center justify-between">
             <div className="flex items-center gap-3 text-sm">
               <span className="font-medium text-foreground hidden sm:inline-block">
-                {profile?.store_name || 'Minha Assistência'}
+                {displayName}
               </span>
               <Separator orientation="vertical" className="h-4 hidden sm:block" />
-              <span className="text-muted-foreground">por LinkGestor</span>
+              <span className="text-muted-foreground hidden sm:inline-block">por LinkGestor</span>
             </div>
             <div className="flex items-center gap-4">
               <Button
@@ -107,15 +115,14 @@ export default function Layout() {
                 <Bell className="size-5" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background" />
               </Button>
-              <Avatar className="h-8 w-8 rounded-md border border-border/50 cursor-pointer hover:opacity-80 transition-opacity">
-                <AvatarImage
-                  src={
-                    profile?.logo_url ||
-                    'https://img.usecurling.com/i?q=tech%20store&shape=fill&color=violet'
-                  }
-                />
-                <AvatarFallback className="rounded-md">LG</AvatarFallback>
-              </Avatar>
+              <Link to="/configuracoes">
+                <Avatar className="h-8 w-8 rounded-md border border-border/50 cursor-pointer hover:opacity-80 transition-opacity">
+                  <AvatarImage src={displayLogo} className="object-cover" />
+                  <AvatarFallback className="rounded-md">
+                    {displayName.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             </div>
           </div>
         </header>
