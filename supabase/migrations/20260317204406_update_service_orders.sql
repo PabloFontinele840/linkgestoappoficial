@@ -1,11 +1,11 @@
--- 1. Update existing statuses to match new constraint
+-- 1. Drop old constraint first to allow updates
+ALTER TABLE public.service_orders DROP CONSTRAINT IF EXISTS service_orders_status_check;
+
+-- 2. Update existing statuses to match new constraint
 UPDATE public.service_orders SET status = 'Aberta' WHERE status = 'Pendente';
 UPDATE public.service_orders SET status = 'Em andamento' WHERE status = 'Em Andamento';
 UPDATE public.service_orders SET status = 'Finalizada' WHERE status = 'Finalizado';
 UPDATE public.service_orders SET status = 'Cancelada' WHERE status = 'Cancelado';
-
--- 2. Drop old constraint
-ALTER TABLE public.service_orders DROP CONSTRAINT IF EXISTS service_orders_status_check;
 
 -- 3. Add new columns to service_orders
 ALTER TABLE public.service_orders
@@ -113,3 +113,4 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_os_created
   AFTER INSERT ON public.service_orders
   FOR EACH ROW EXECUTE FUNCTION public.handle_os_created();
+
