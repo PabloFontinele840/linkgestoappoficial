@@ -36,6 +36,8 @@ export function TransactionForm({
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
 
+  const actualType = defaultType === 'contas' ? 'saida' : defaultType
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!user) return
@@ -59,10 +61,12 @@ export function TransactionForm({
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="capitalize">Nova {defaultType}</DialogTitle>
+        <DialogTitle className="capitalize">
+          Nova {defaultType === 'contas' ? 'Conta' : defaultType}
+        </DialogTitle>
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-        <input type="hidden" name="type" value={defaultType} />
+        <input type="hidden" name="type" value={actualType} />
         <div className="space-y-2">
           <Label>Descrição</Label>
           <Input name="description" required placeholder="Ex: Conta de Luz, Venda Tela..." />
@@ -98,12 +102,21 @@ export function TransactionForm({
           </div>
           <div className="space-y-2">
             <Label>Status</Label>
-            <Select name="status" defaultValue={defaultType === 'entrada' ? 'recebido' : 'pago'}>
+            <Select
+              name="status"
+              defaultValue={
+                defaultType === 'contas'
+                  ? 'pendente'
+                  : actualType === 'entrada'
+                    ? 'recebido'
+                    : 'pago'
+              }
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {defaultType === 'entrada' ? (
+                {actualType === 'entrada' ? (
                   <>
                     <SelectItem value="recebido">Recebido</SelectItem>
                     <SelectItem value="pendente">Pendente</SelectItem>
@@ -114,6 +127,18 @@ export function TransactionForm({
                     <SelectItem value="pendente">Pendente</SelectItem>
                   </>
                 )}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2 col-span-2">
+            <Label>Classificação (Fixo / Variável)</Label>
+            <Select name="classification" defaultValue="Variável">
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Fixa">Fixa</SelectItem>
+                <SelectItem value="Variável">Variável</SelectItem>
               </SelectContent>
             </Select>
           </div>

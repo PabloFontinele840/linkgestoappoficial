@@ -13,6 +13,8 @@ import Customers from './pages/Customers'
 import Suppliers from './pages/Suppliers'
 import Inventory from './pages/Inventory'
 import Finance from './pages/Finance'
+import Sales from './pages/Sales'
+import Reports from './pages/Reports'
 import Construction from './pages/Construction'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
@@ -28,6 +30,8 @@ const App = () => {
     '/fornecedores',
     '/estoque',
     '/financeiro',
+    '/vendas',
+    '/relatorios',
   ]
 
   return (
@@ -50,6 +54,8 @@ const App = () => {
                   <Route path="/fornecedores" element={<Suppliers />} />
                   <Route path="/estoque" element={<Inventory />} />
                   <Route path="/financeiro" element={<Finance />} />
+                  <Route path="/vendas" element={<Sales />} />
+                  <Route path="/relatorios" element={<Reports />} />
 
                   {NAV_ITEMS.filter((item) => !implementedRoutes.includes(item.path)).map(
                     (item) => (

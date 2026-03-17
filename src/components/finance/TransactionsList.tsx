@@ -85,11 +85,11 @@ export function TransactionsList({
             )}
             {mode === 'historico' && <h3 className="font-medium text-lg">Extrato Completo</h3>}
           </div>
-          {(mode === 'entrada' || mode === 'saida') && (
+          {(mode === 'entrada' || mode === 'saida' || mode === 'contas') && (
             <Dialog open={formOpen} onOpenChange={setFormOpen}>
               <DialogTrigger asChild>
                 <Button size="sm">
-                  <Plus className="size-4 mr-2" /> Nova {mode}
+                  <Plus className="size-4 mr-2" /> Nova {mode === 'contas' ? 'Conta' : mode}
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -130,7 +130,24 @@ export function TransactionsList({
                     <TableCell className="text-muted-foreground text-sm">
                       {format(new Date(t.transaction_date), 'dd/MM/yyyy')}
                     </TableCell>
-                    <TableCell className="font-medium">{t.description}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className="font-medium">{t.description}</span>
+                        {t.classification && (
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              'h-4 px-1 text-[10px] uppercase font-bold tracking-wider',
+                              t.classification === 'Fixa'
+                                ? 'border-blue-500/50 text-blue-500'
+                                : 'border-muted-foreground/30 text-muted-foreground',
+                            )}
+                          >
+                            {t.classification}
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <Badge variant="secondary" className="font-normal">
                         {t.category}

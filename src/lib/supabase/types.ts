@@ -93,6 +93,163 @@ export type Database = {
         }
         Relationships: []
       }
+      financial_transactions: {
+        Row: {
+          amount: number
+          category: string | null
+          created_at: string
+          description: string
+          id: string
+          notes: string | null
+          origin: string | null
+          payment_method: string | null
+          status: string
+          transaction_date: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          category?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          notes?: string | null
+          origin?: string | null
+          payment_method?: string | null
+          status: string
+          transaction_date: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          notes?: string | null
+          origin?: string | null
+          payment_method?: string | null
+          status?: string
+          transaction_date?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      inventory_items: {
+        Row: {
+          category: string | null
+          cost_price: number | null
+          created_at: string
+          device_brand: string | null
+          device_model: string | null
+          id: string
+          location: string | null
+          minimum_stock: number | null
+          name: string
+          notes: string | null
+          part_brand: string | null
+          quantity: number | null
+          sku: string | null
+          suggested_price: number | null
+          supplier_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          cost_price?: number | null
+          created_at?: string
+          device_brand?: string | null
+          device_model?: string | null
+          id?: string
+          location?: string | null
+          minimum_stock?: number | null
+          name: string
+          notes?: string | null
+          part_brand?: string | null
+          quantity?: number | null
+          sku?: string | null
+          suggested_price?: number | null
+          supplier_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          cost_price?: number | null
+          created_at?: string
+          device_brand?: string | null
+          device_model?: string | null
+          id?: string
+          location?: string | null
+          minimum_stock?: number | null
+          name?: string
+          notes?: string | null
+          part_brand?: string | null
+          quantity?: number | null
+          sku?: string | null
+          suggested_price?: number | null
+          supplier_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'inventory_items_supplier_id_fkey'
+            columns: ['supplier_id']
+            isOneToOne: false
+            referencedRelation: 'suppliers'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      inventory_movements: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          notes: string | null
+          quantity: number
+          reason: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          notes?: string | null
+          quantity: number
+          reason?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          notes?: string | null
+          quantity?: number
+          reason?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'inventory_movements_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'inventory_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       monthly_goals: {
         Row: {
           created_at: string
@@ -644,6 +801,47 @@ export const Constants = {
 //   address: text (nullable)
 //   status: text (nullable, default: 'Ativo'::text)
 //   notes: text (nullable)
+// Table: financial_transactions
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   type: text (not null)
+//   description: text (not null)
+//   category: text (nullable)
+//   amount: numeric (not null, default: 0)
+//   payment_method: text (nullable)
+//   transaction_date: date (not null)
+//   status: text (not null)
+//   origin: text (nullable, default: 'manual'::text)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
+// Table: inventory_items
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   name: text (not null)
+//   category: text (nullable)
+//   device_brand: text (nullable)
+//   device_model: text (nullable)
+//   part_brand: text (nullable)
+//   supplier_id: uuid (nullable)
+//   sku: text (nullable)
+//   quantity: integer (nullable, default: 0)
+//   minimum_stock: integer (nullable, default: 0)
+//   cost_price: numeric (nullable, default: 0)
+//   suggested_price: numeric (nullable, default: 0)
+//   location: text (nullable)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
+// Table: inventory_movements
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   item_id: uuid (not null)
+//   type: text (not null)
+//   quantity: integer (not null)
+//   reason: text (nullable)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
 // Table: monthly_goals
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -749,6 +947,20 @@ export const Constants = {
 // Table: customers
 //   PRIMARY KEY customers_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY customers_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: financial_transactions
+//   PRIMARY KEY financial_transactions_pkey: PRIMARY KEY (id)
+//   CHECK financial_transactions_status_check: CHECK ((status = ANY (ARRAY['recebido'::text, 'pago'::text, 'pendente'::text, 'vencido'::text])))
+//   CHECK financial_transactions_type_check: CHECK ((type = ANY (ARRAY['entrada'::text, 'saida'::text])))
+//   FOREIGN KEY financial_transactions_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: inventory_items
+//   PRIMARY KEY inventory_items_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY inventory_items_supplier_id_fkey: FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+//   FOREIGN KEY inventory_items_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: inventory_movements
+//   FOREIGN KEY inventory_movements_item_id_fkey: FOREIGN KEY (item_id) REFERENCES inventory_items(id) ON DELETE CASCADE
+//   PRIMARY KEY inventory_movements_pkey: PRIMARY KEY (id)
+//   CHECK inventory_movements_type_check: CHECK ((type = ANY (ARRAY['Entrada'::text, 'Saída'::text, 'Ajuste'::text])))
+//   FOREIGN KEY inventory_movements_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: monthly_goals
 //   PRIMARY KEY monthly_goals_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY monthly_goals_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
@@ -798,6 +1010,36 @@ export const Constants = {
 // Table: customers
 //   Policy "Users can access own customers" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
+// Table: financial_transactions
+//   Policy "Users can delete own financial transactions" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own financial transactions" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own financial transactions" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own financial transactions" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: inventory_items
+//   Policy "Users can delete own inventory items" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own inventory items" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own inventory items" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own inventory items" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: inventory_movements
+//   Policy "Users can delete own inventory movements" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own inventory movements" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own inventory movements" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own inventory movements" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: monthly_goals
 //   Policy "Users can access own goals" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
@@ -827,6 +1069,27 @@ export const Constants = {
 //     USING: (user_id = auth.uid())
 
 // --- DATABASE FUNCTIONS ---
+// FUNCTION handle_inventory_movement()
+//   CREATE OR REPLACE FUNCTION public.handle_inventory_movement()
+//    RETURNS trigger
+//    LANGUAGE plpgsql
+//    SECURITY DEFINER
+//   AS $function$
+//   BEGIN
+//       IF NEW.type = 'Entrada' THEN
+//           UPDATE public.inventory_items SET quantity = quantity + NEW.quantity WHERE id = NEW.item_id;
+//       ELSIF NEW.type = 'Saída' THEN
+//           IF (SELECT quantity FROM public.inventory_items WHERE id = NEW.item_id) < NEW.quantity THEN
+//               RAISE EXCEPTION 'Estoque insuficiente para a saída.';
+//           END IF;
+//           UPDATE public.inventory_items SET quantity = quantity - NEW.quantity WHERE id = NEW.item_id;
+//       ELSIF NEW.type = 'Ajuste' THEN
+//           UPDATE public.inventory_items SET quantity = NEW.quantity WHERE id = NEW.item_id;
+//       END IF;
+//       RETURN NEW;
+//   END;
+//   $function$
+//
 // FUNCTION handle_new_user()
 //   CREATE OR REPLACE FUNCTION public.handle_new_user()
 //    RETURNS trigger
@@ -903,6 +1166,8 @@ export const Constants = {
 //
 
 // --- TRIGGERS ---
+// Table: inventory_movements
+//   on_inventory_movement: CREATE TRIGGER on_inventory_movement AFTER INSERT ON public.inventory_movements FOR EACH ROW EXECUTE FUNCTION handle_inventory_movement()
 // Table: service_orders
 //   on_os_created: CREATE TRIGGER on_os_created AFTER INSERT ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_created()
 //   on_os_status_change: CREATE TRIGGER on_os_status_change BEFORE UPDATE ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_finalized()
