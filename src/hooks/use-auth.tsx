@@ -28,8 +28,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const fetchProfile = async (userId: string) => {
-      const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
-      setProfile(data)
+      try {
+        const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
+        setProfile(data)
+      } catch (e) {
+        console.error('Failed to fetch profile', e)
+      }
     }
 
     const {
@@ -59,25 +63,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
-        emailRedirectTo: `${window.location.origin}/`,
-      },
-    })
-    return { error }
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName },
+          emailRedirectTo: `${window.location.origin}/`,
+        },
+      })
+      return { error }
+    } catch (error: any) {
+      return { error }
+    }
   }
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error }
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      return { error }
+    } catch (error: any) {
+      return { error }
+    }
   }
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    return { error }
+    try {
+      const { error } = await supabase.auth.signOut()
+      return { error }
+    } catch (error: any) {
+      return { error }
+    }
   }
 
   return (

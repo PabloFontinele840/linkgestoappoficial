@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Smartphone, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useToast } from '@/hooks/use-toast'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -14,18 +14,49 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await signIn(email, password)
-    setLoading(false)
 
-    if (error) {
-      toast.error('Erro ao fazer login', { description: error.message })
-    } else {
-      toast.success('Login realizado com sucesso!')
-      navigate('/')
+    try {
+      const { error } = await signIn(email, password)
+
+      if (error) {
+        const isInvalidCredentials =
+          error.status === 400 ||
+          (error.message && error.message.toLowerCase().includes('invalid login credentials'))
+
+        if (isInvalidCredentials) {
+          toast({
+            variant: 'destructive',
+            title: 'Falha na autenticação',
+            description:
+              'E-mail ou senha inválidos. Por favor, verifique seus dados e tente novamente.',
+          })
+        } else {
+          toast({
+            variant: 'destructive',
+            title: 'Erro',
+            description: 'Ocorreu um erro ao realizar o login. Tente novamente mais tarde.',
+          })
+        }
+      } else {
+        toast({
+          title: 'Sucesso',
+          description: 'Login realizado com sucesso!',
+        })
+        navigate('/')
+      }
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'Erro inesperado',
+        description: 'Ocorreu um erro ao realizar o login. Tente novamente mais tarde.',
+      })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -60,6 +91,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <div className="space-y-2">
@@ -72,6 +104,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
