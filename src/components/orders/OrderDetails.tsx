@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getOrderById, updateOrderStatus } from '@/services/orders'
+import { getOrderById, updateOrderStatus, deleteOrder } from '@/services/orders'
 import { OrderTimeline } from './OrderTimeline'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,10 +11,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Loader2, ArrowLeft, Calendar, User, Smartphone, ShieldCheck } from 'lucide-react'
+import { Loader2, ArrowLeft, Calendar, User, Smartphone, ShieldCheck, Trash2 } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { toast } from 'sonner'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
 export function OrderDetails({ orderId, onClose }: { orderId: string; onClose: () => void }) {
   const [order, setOrder] = useState<any>(null)
@@ -49,6 +60,16 @@ export function OrderDetails({ orderId, onClose }: { orderId: string; onClose: (
     }
   }
 
+  const handleDelete = async () => {
+    try {
+      await deleteOrder(orderId)
+      toast.success('Ordem de serviço excluída.')
+      onClose()
+    } catch (e: any) {
+      toast.error('Erro ao excluir: ' + e.message)
+    }
+  }
+
   if (loading)
     return (
       <div className="flex justify-center p-12">
@@ -64,13 +85,42 @@ export function OrderDetails({ orderId, onClose }: { orderId: string; onClose: (
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={onClose}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-2 size-4" /> Voltar
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="mr-2 size-4" /> Voltar
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/20"
+              >
+                <Trash2 className="size-4 mr-2" /> Excluir OS
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta ação é irreversível e removerá todos os dados desta Ordem de Serviço.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Excluir
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-muted-foreground">Status Atual:</span>
           <Select value={order.status} onValueChange={handleStatusChange} disabled={updating}>

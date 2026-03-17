@@ -47,3 +47,12 @@ export async function getCustomerStats(customerId: string) {
     totalInvested,
   }
 }
+
+export async function deleteCustomer(id: string) {
+  const { data } = await supabase.from('service_orders').select('id').eq('customer_id', id).limit(1)
+  if (data && data.length > 0) {
+    throw new Error('Não é possível excluir. O cliente possui ordens de serviço associadas.')
+  }
+  const { error } = await supabase.from('customers').delete().eq('id', id)
+  if (error) throw error
+}

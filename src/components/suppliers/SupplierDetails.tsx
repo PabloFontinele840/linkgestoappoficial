@@ -1,9 +1,21 @@
 import { useEffect, useState } from 'react'
-import { getSupplierById } from '@/services/suppliers'
+import { getSupplierById, deleteSupplier } from '@/services/suppliers'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, ArrowLeft, PackageSearch } from 'lucide-react'
+import { Loader2, ArrowLeft, PackageSearch, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
 export function SupplierDetails({ id, onClose }: { id: string; onClose: () => void }) {
   const [data, setData] = useState<any>(null)
@@ -16,6 +28,16 @@ export function SupplierDetails({ id, onClose }: { id: string; onClose: () => vo
     })
   }, [id])
 
+  const handleDelete = async () => {
+    try {
+      await deleteSupplier(id)
+      toast.success('Fornecedor excluído com sucesso.')
+      onClose()
+    } catch (e: any) {
+      toast.error('Erro ao excluir: ' + e.message)
+    }
+  }
+
   if (loading || !data)
     return (
       <div className="flex justify-center p-12">
@@ -25,13 +47,43 @@ export function SupplierDetails({ id, onClose }: { id: string; onClose: () => vo
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <Button
-        variant="ghost"
-        onClick={onClose}
-        className="text-muted-foreground hover:text-foreground -ml-4"
-      >
-        <ArrowLeft className="mr-2 size-4" /> Voltar
-      </Button>
+      <div className="flex justify-between items-center">
+        <Button
+          variant="ghost"
+          onClick={onClose}
+          className="text-muted-foreground hover:text-foreground -ml-4"
+        >
+          <ArrowLeft className="mr-2 size-4" /> Voltar
+        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/20"
+            >
+              <Trash2 className="size-4 mr-2" /> Excluir Fornecedor
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Se houver itens de estoque associados a este fornecedor, a exclusão será bloqueada
+                para manter a integridade dos dados.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Excluir
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
         <Card className="border-border/50 bg-card/40 backdrop-blur-sm shadow-sm">
@@ -92,7 +144,7 @@ export function SupplierDetails({ id, onClose }: { id: string; onClose: () => vo
             </div>
             <h3 className="font-semibold text-lg mb-2">Peças Fornecidas</h3>
             <p className="text-sm text-muted-foreground max-w-[250px]">
-              A integração de fornecedores com o módulo de estoque estará disponível em breve.
+              A integração detalhada dos itens será exibida em atualizações futuras.
             </p>
           </CardContent>
         </Card>

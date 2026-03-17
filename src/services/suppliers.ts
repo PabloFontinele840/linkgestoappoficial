@@ -28,3 +28,16 @@ export async function createSupplier(payload: any, userId: string) {
   if (error) throw error
   return data
 }
+
+export async function deleteSupplier(id: string) {
+  const { data } = await supabase
+    .from('inventory_items')
+    .select('id')
+    .eq('supplier_id', id)
+    .limit(1)
+  if (data && data.length > 0) {
+    throw new Error('Não é possível excluir. O fornecedor está vinculado a itens de estoque.')
+  }
+  const { error } = await supabase.from('suppliers').delete().eq('id', id)
+  if (error) throw error
+}

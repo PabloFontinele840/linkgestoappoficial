@@ -74,3 +74,8 @@ export async function updateOrderStatus(id: string, status: string, finalValue?:
   if (error) throw error
   return data
 }
+
+export async function deleteOrder(id: string) {
+  const { error } = await supabase.from('service_orders').delete().eq('id', id)
+  if (error) throw error
+}

@@ -1,136 +1,115 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Light Mode Default Variables */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-
-    --primary: 262 83% 58%; /* Default Purple */
-    --primary-foreground: 210 40% 98%;
-
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
+    --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 262 83% 58%;
-
-    --radius: 0.75rem;
-
+    --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 262 83% 58%;
-    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 262 83% 58%;
-
-    /* Chart colors remain consistent or adjust via CSS later */
-    --chart-1: 262 83% 58%;
-    --chart-2: 217 91% 60%;
-    --chart-3: 152 76% 40%;
-    --chart-4: 43 96% 56%;
-    --chart-5: 0 84% 60%;
   }
 
   .dark {
-    /* Dark Mode Variables matching LinkGestor spec */
-    --background: 240 21% 7%; /* #0F0F17 */
+    --background: 240 21% 7%;
     --foreground: 0 0% 100%;
-
-    --card: 240 16% 12%; /* #1A1A24 */
+    --card: 240 16% 12%;
     --card-foreground: 0 0% 100%;
-
     --popover: 240 16% 12%;
     --popover-foreground: 0 0% 100%;
-
-    --primary: 262 83% 58%; /* Controlled by theme picker */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 11% 20%;
+    --secondary: 240 11% 18%;
     --secondary-foreground: 0 0% 100%;
-
-    --muted: 240 11% 20%;
-    --muted-foreground: 240 5% 65%; /* #A1A1AA */
-
-    --accent: 240 11% 20%;
+    --muted: 240 11% 18%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 11% 18%;
     --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 240 11% 20%; /* #2A2A35 */
-    --input: 240 11% 20%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 11% 18%;
+    --input: 240 11% 18%;
     --ring: 262 83% 58%;
-
     --sidebar-background: 240 21% 7%;
-    --sidebar-foreground: 0 0% 100%;
+    --sidebar-foreground: 240 5% 65%;
     --sidebar-primary: 262 83% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 16% 12%;
+    --sidebar-accent: 240 11% 18%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 240 11% 20%;
+    --sidebar-border: 240 11% 18%;
     --sidebar-ring: 262 83% 58%;
-  }
-
-  body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/30 transition-colors duration-300;
-    font-family: 'Inter', sans-serif;
-  }
-
-  section[aria-label='Notifications alt+T'] {
-    padding: 0 !important;
-    margin: 0 !important;
   }
 }
 
-@layer utilities {
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+@layer base {
+  * {
+    @apply border-border;
   }
-  @keyframes fade-in-up {
-    from {
-      transform: translateY(10px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  body {
+    @apply bg-background text-foreground antialiased;
   }
-  .animate-fade-in {
-    animation: fade-in 0.4s ease-out forwards;
+}
+
+.glass-header {
+  @apply bg-background/80 backdrop-blur-md border-b border-border/50;
+}
+
+.shadow-elevation {
+  @apply shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)];
+}
+
+.dark .shadow-elevation {
+  @apply shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)];
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
-  .animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out forwards;
+  to {
+    opacity: 1;
   }
-  .glass-header {
-    @apply bg-background/80 backdrop-blur-md border-b border-border/50;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
