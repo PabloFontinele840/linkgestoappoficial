@@ -1,23 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts'
-import { CHART_DATA } from '@/lib/constants'
 
 const chartConfig = {
   atual: { label: 'Mês Atual', color: 'hsl(var(--primary))' },
   anterior: { label: 'Mês Anterior', color: 'hsl(var(--muted-foreground))' },
 }
 
-export function RevenueChart() {
+export function RevenueChart({ data }: { data: any[] }) {
   return (
-    <Card className="border-border/50 bg-card/40 backdrop-blur-sm h-full flex flex-col">
+    <Card className="border-border/50 bg-card/40 backdrop-blur-sm h-full flex flex-col shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">Faturamento: Atual vs Anterior</CardTitle>
+        <CardTitle className="text-lg font-semibold">Faturamento Diário</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-4 min-h-[300px]">
         <ChartContainer config={chartConfig} className="h-full w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={CHART_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="fillAtual" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--color-atual)" stopOpacity={0.3} />

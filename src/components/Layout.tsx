@@ -1,5 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { Bell, LogOut, Smartphone } from 'lucide-react'
+import { useAuth } from '@/hooks/use-auth'
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +22,9 @@ import { NAV_ITEMS } from '@/lib/constants'
 
 export default function Layout() {
   const location = useLocation()
+  const { user, profile, signOut } = useAuth()
+
+  const handleSignOut = () => signOut()
 
   return (
     <SidebarProvider>
@@ -59,18 +63,24 @@ export default function Layout() {
           <div className="flex items-center justify-between rounded-xl bg-card p-2 border border-border/50">
             <div className="flex items-center gap-2">
               <Avatar className="h-8 w-8 rounded-md">
-                <AvatarImage src="https://img.usecurling.com/ppl/thumbnail?seed=12" />
-                <AvatarFallback className="rounded-md">LG</AvatarFallback>
+                <AvatarImage src={`https://img.usecurling.com/ppl/thumbnail?seed=${user?.id}`} />
+                <AvatarFallback className="rounded-md">
+                  {profile?.full_name?.substring(0, 2).toUpperCase() || 'AD'}
+                </AvatarFallback>
               </Avatar>
               <div className="flex flex-col text-sm leading-tight">
-                <span className="font-semibold truncate w-24">Admin</span>
-                <span className="text-xs text-muted-foreground">Pro Plan</span>
+                <span className="font-semibold truncate w-24">
+                  {profile?.full_name || 'Usuário'}
+                </span>
+                <span className="text-xs text-muted-foreground truncate w-24">{user?.email}</span>
               </div>
             </div>
             <Button
               variant="ghost"
               size="icon"
+              onClick={handleSignOut}
               className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              title="Sair"
             >
               <LogOut className="size-4" />
             </Button>
@@ -83,7 +93,7 @@ export default function Layout() {
           <div className="flex flex-1 items-center justify-between">
             <div className="flex items-center gap-3 text-sm">
               <span className="font-medium text-foreground hidden sm:inline-block">
-                Assistência do Usuário
+                {profile?.store_name || 'Minha Assistência'}
               </span>
               <Separator orientation="vertical" className="h-4 hidden sm:block" />
               <span className="text-muted-foreground">por LinkGestor</span>
@@ -98,8 +108,13 @@ export default function Layout() {
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background" />
               </Button>
               <Avatar className="h-8 w-8 rounded-md border border-border/50 cursor-pointer hover:opacity-80 transition-opacity">
-                <AvatarImage src="https://img.usecurling.com/i?q=tech%20store&shape=fill&color=violet" />
-                <AvatarFallback className="rounded-md">AS</AvatarFallback>
+                <AvatarImage
+                  src={
+                    profile?.logo_url ||
+                    'https://img.usecurling.com/i?q=tech%20store&shape=fill&color=violet'
+                  }
+                />
+                <AvatarFallback className="rounded-md">LG</AvatarFallback>
               </Avatar>
             </div>
           </div>
