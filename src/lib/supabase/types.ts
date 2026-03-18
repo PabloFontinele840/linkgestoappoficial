@@ -1,14 +1,86 @@
 // AVOID UPDATING THIS FILE DIRECTLY. It is automatically generated.
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.4'
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
+      ai_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          message: string
+          response: string
+          user_id: string
+        }
+        Insert: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          message: string
+          response: string
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          message?: string
+          response?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          created_at: string | null
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          notes: string | null
+          scheduled_at: string
+          service_type: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          notes?: string | null
+          scheduled_at: string
+          service_type?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          notes?: string | null
+          scheduled_at?: string
+          service_type?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       auto_brands: {
         Row: {
           created_at: string
@@ -84,11 +156,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'auto_models_brand_id_fkey'
-            columns: ['brand_id']
+            foreignKeyName: "auto_models_brand_id_fkey"
+            columns: ["brand_id"]
             isOneToOne: false
-            referencedRelation: 'auto_brands'
-            referencedColumns: ['id']
+            referencedRelation: "auto_brands"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -125,18 +197,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'auto_services_defect_id_fkey'
-            columns: ['defect_id']
+            foreignKeyName: "auto_services_defect_id_fkey"
+            columns: ["defect_id"]
             isOneToOne: false
-            referencedRelation: 'auto_defects'
-            referencedColumns: ['id']
+            referencedRelation: "auto_defects"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'auto_services_model_id_fkey'
-            columns: ['model_id']
+            foreignKeyName: "auto_services_model_id_fkey"
+            columns: ["model_id"]
             isOneToOne: false
-            referencedRelation: 'auto_models'
-            referencedColumns: ['id']
+            referencedRelation: "auto_models"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -344,11 +416,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'inventory_items_supplier_id_fkey'
-            columns: ['supplier_id']
+            foreignKeyName: "inventory_items_supplier_id_fkey"
+            columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: 'suppliers'
-            referencedColumns: ['id']
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -385,11 +457,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'inventory_movements_item_id_fkey'
-            columns: ['item_id']
+            foreignKeyName: "inventory_movements_item_id_fkey"
+            columns: ["item_id"]
             isOneToOne: false
-            referencedRelation: 'inventory_items'
-            referencedColumns: ['id']
+            referencedRelation: "inventory_items"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -519,11 +591,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'sale_items_sale_id_fkey'
-            columns: ['sale_id']
+            foreignKeyName: "sale_items_sale_id_fkey"
+            columns: ["sale_id"]
             isOneToOne: false
-            referencedRelation: 'sales'
-            referencedColumns: ['id']
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -575,11 +647,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'sales_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "sales_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'customers'
-            referencedColumns: ['id']
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -610,11 +682,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'service_order_attachments_service_order_id_fkey'
-            columns: ['service_order_id']
+            foreignKeyName: "service_order_attachments_service_order_id_fkey"
+            columns: ["service_order_id"]
             isOneToOne: false
-            referencedRelation: 'service_orders'
-            referencedColumns: ['id']
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -645,11 +717,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'service_order_logs_service_order_id_fkey'
-            columns: ['service_order_id']
+            foreignKeyName: "service_order_logs_service_order_id_fkey"
+            columns: ["service_order_id"]
             isOneToOne: false
-            referencedRelation: 'service_orders'
-            referencedColumns: ['id']
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -737,25 +809,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'service_orders_customer_id_fkey'
-            columns: ['customer_id']
+            foreignKeyName: "service_orders_customer_id_fkey"
+            columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: 'customers'
-            referencedColumns: ['id']
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'service_orders_product_id_fkey'
-            columns: ['product_id']
+            foreignKeyName: "service_orders_product_id_fkey"
+            columns: ["product_id"]
             isOneToOne: false
-            referencedRelation: 'products'
-            referencedColumns: ['id']
+            referencedRelation: "products"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'service_orders_service_id_fkey'
-            columns: ['service_id']
+            foreignKeyName: "service_orders_service_id_fkey"
+            columns: ["service_id"]
             isOneToOne: false
-            referencedRelation: 'services'
-            referencedColumns: ['id']
+            referencedRelation: "services"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -878,7 +950,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_public_os_status: {
+        Args: { p_search: string; p_user_id: string }
+        Returns: {
+          created_at: string
+          device_brand: string
+          device_model: string
+          id: string
+          reported_problem: string
+          short_id: string
+          status: string
+          value: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
@@ -889,31 +973,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -922,23 +1008,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -947,23 +1033,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -972,36 +1058,36 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
@@ -1009,6 +1095,7 @@ export const Constants = {
     Enums: {},
   },
 } as const
+
 
 // ====== DATABASE EXTENDED CONTEXT (auto-generated) ======
 // This section contains actual PostgreSQL column types, constraints, RLS policies,
@@ -1020,6 +1107,24 @@ export const Constants = {
 // --- COLUMN TYPES (actual PostgreSQL types) ---
 // Use this to know the real database type when writing migrations.
 // "string" in TypeScript types above may be uuid, text, varchar, timestamptz, etc.
+// Table: ai_logs
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   message: text (not null)
+//   response: text (not null)
+//   action_type: text (not null, default: 'none'::text)
+//   created_at: timestamp with time zone (not null, default: now())
+// Table: appointments
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   customer_name: text (not null)
+//   customer_phone: text (nullable)
+//   scheduled_at: timestamp with time zone (not null)
+//   service_type: text (nullable)
+//   status: text (nullable, default: 'Agendado'::text)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (nullable, default: now())
+//   updated_at: timestamp with time zone (nullable, default: now())
 // Table: auto_brands
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -1239,6 +1344,12 @@ export const Constants = {
 //   updated_at: timestamp with time zone (not null, default: now())
 
 // --- CONSTRAINTS ---
+// Table: ai_logs
+//   PRIMARY KEY ai_logs_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY ai_logs_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: appointments
+//   PRIMARY KEY appointments_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY appointments_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: auto_brands
 //   PRIMARY KEY auto_brands_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY auto_brands_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
@@ -1324,6 +1435,15 @@ export const Constants = {
 //   FOREIGN KEY transactions_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 
 // --- ROW LEVEL SECURITY POLICIES ---
+// Table: ai_logs
+//   Policy "Users can insert own ai_logs" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own ai_logs" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+// Table: appointments
+//   Policy "Users can manage own appointments" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: auto_brands
 //   Policy "Public select brands" (SELECT, PERMISSIVE) roles={public}
 //     USING: (is_active = true)
@@ -1440,6 +1560,36 @@ export const Constants = {
 //     USING: (user_id = auth.uid())
 
 // --- DATABASE FUNCTIONS ---
+// FUNCTION get_public_os_status(uuid, text)
+//   CREATE OR REPLACE FUNCTION public.get_public_os_status(p_user_id uuid, p_search text)
+//    RETURNS TABLE(id uuid, short_id text, status text, created_at timestamp with time zone, device_brand text, device_model text, reported_problem text, value numeric)
+//    LANGUAGE plpgsql
+//    SECURITY DEFINER
+//   AS $function$
+//   BEGIN
+//     RETURN QUERY
+//     SELECT 
+//       so.id,
+//       split_part(so.id::text, '-', 1) as short_id,
+//       so.status,
+//       so.created_at,
+//       so.device_brand,
+//       so.device_model,
+//       so.reported_problem,
+//       COALESCE(so.value, so.estimated_value, 0) as value
+//     FROM public.service_orders so
+//     LEFT JOIN public.customers c ON c.id = so.customer_id
+//     WHERE so.user_id = p_user_id
+//       AND (
+//         split_part(so.id::text, '-', 1) ILIKE '%' || p_search || '%'
+//         OR c.cpf ILIKE '%' || p_search || '%'
+//         OR c.phone ILIKE '%' || p_search || '%'
+//       )
+//     ORDER BY so.created_at DESC
+//     LIMIT 10;
+//   END;
+//   $function$
+//   
 // FUNCTION handle_inventory_movement()
 //   CREATE OR REPLACE FUNCTION public.handle_inventory_movement()
 //    RETURNS trigger
@@ -1460,7 +1610,7 @@ export const Constants = {
 //       RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_new_user()
 //   CREATE OR REPLACE FUNCTION public.handle_new_user()
 //    RETURNS trigger
@@ -1470,14 +1620,14 @@ export const Constants = {
 //   BEGIN
 //     INSERT INTO public.profiles (id, full_name, store_name)
 //     VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name', 'Minha Assistência');
-//
+//   
 //     INSERT INTO public.business_settings (user_id, business_name)
 //     VALUES (NEW.id, 'Minha Assistência');
-//
+//   
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_os_created()
 //   CREATE OR REPLACE FUNCTION public.handle_os_created()
 //    RETURNS trigger
@@ -1490,7 +1640,7 @@ export const Constants = {
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_os_finalized()
 //   CREATE OR REPLACE FUNCTION public.handle_os_finalized()
 //    RETURNS trigger
@@ -1512,7 +1662,7 @@ export const Constants = {
 //         'OS ' || split_part(NEW.id::text, '-', 1),
 //         NOW()
 //       );
-//
+//   
 //       -- Set finished_at and warranty_expiry_date if not set
 //       IF NEW.finished_at IS NULL THEN
 //         NEW.finished_at := NOW();
@@ -1521,20 +1671,20 @@ export const Constants = {
 //         END IF;
 //       END IF;
 //     END IF;
-//
+//   
 //     -- Create log entry
 //     IF NEW.status != OLD.status THEN
 //       INSERT INTO public.service_order_logs (service_order_id, user_id, old_status, new_status)
 //       VALUES (NEW.id, NEW.user_id, OLD.status, NEW.status);
 //     END IF;
-//
+//   
 //     -- Always update updated_at
 //     NEW.updated_at := NOW();
-//
+//   
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 
 // --- TRIGGERS ---
 // Table: inventory_movements
@@ -1551,3 +1701,4 @@ export const Constants = {
 //   CREATE UNIQUE INDEX business_settings_user_id_key ON public.business_settings USING btree (user_id)
 // Table: monthly_goals
 //   CREATE UNIQUE INDEX monthly_goals_user_id_month_year_key ON public.monthly_goals USING btree (user_id, month_year)
+
