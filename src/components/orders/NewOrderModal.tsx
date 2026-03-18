@@ -23,6 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { CustomerSelector } from './CustomerSelector'
+import { ServiceAutocomplete } from './ServiceAutocomplete'
 import { Trash2, Loader2, Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Separator } from '@/components/ui/separator'
@@ -235,10 +236,17 @@ export function NewOrderModal({ open, onOpenChange, onCreated }: any) {
                   </Select>
                 </div>
                 <div className="md:col-span-2">
-                  <Input
-                    placeholder="Descrição"
+                  <ServiceAutocomplete
                     value={tempItem.description}
-                    onChange={(e) => setTempItem({ ...tempItem, description: e.target.value })}
+                    onChange={(val) => setTempItem({ ...tempItem, description: val })}
+                    onSelectService={(s) => {
+                      setTempItem({
+                        ...tempItem,
+                        description: s.name,
+                        cost: s.cost.toString(),
+                        price: s.final_price.toString(),
+                      })
+                    }}
                   />
                 </div>
                 <div className="md:col-span-1">

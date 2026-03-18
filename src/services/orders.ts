@@ -29,71 +29,65 @@ async function syncFinancials(
         'O caixa está fechado. É necessário abrir o caixa para realizar este recebimento.',
       )
 
-    await supabase
-      .from('cash_movements')
-      .insert([
+    await supabase.from('cash_movements').insert([
+      {
+        session_id: session.id,
+        user_id: userId,
+        type: 'entrada',
+        amount: payload.value,
+        origin: 'os',
+        reference_id: id,
+        description: `Recebimento OS ${id.split('-')[0]}`,
+        payment_method: payload.payment_method,
+      },
+    ])
+    if (totalCost > 0) {
+      await supabase.from('cash_movements').insert([
         {
           session_id: session.id,
           user_id: userId,
-          type: 'entrada',
-          amount: payload.value,
+          type: 'saida',
+          amount: totalCost,
           origin: 'os',
           reference_id: id,
-          description: `Recebimento OS ${id.split('-')[0]}`,
-          payment_method: payload.payment_method,
+          description: `Custo OS ${id.split('-')[0]}`,
+          payment_method: 'Dinheiro',
         },
       ])
-    if (totalCost > 0) {
-      await supabase
-        .from('cash_movements')
-        .insert([
-          {
-            session_id: session.id,
-            user_id: userId,
-            type: 'saida',
-            amount: totalCost,
-            origin: 'os',
-            reference_id: id,
-            description: `Custo OS ${id.split('-')[0]}`,
-            payment_method: 'Dinheiro',
-          },
-        ])
     }
 
-    await supabase
-      .from('financial_transactions')
-      .insert([
-        {
-          user_id: userId,
-          type: 'entrada',
-          status: 'recebido',
-          amount: payload.value,
-          category: 'Serviço',
-          classification: 'Variável',
-          description: `Recebimento OS ${id.split('-')[0]}`,
-          transaction_date: new Date().toISOString().split('T')[0],
-          origin_id: id,
-          origin_type: 'os',
-          payment_method: payload.payment_method,
-        },
-        ...(totalCost > 0
-          ? [
-              {
-                user_id: userId,
-                type: 'saida',
-                status: 'pago',
-                amount: totalCost,
-                category: 'Custo Peças',
-                classification: 'Variável',
-                description: `Custo OS ${id.split('-')[0]}`,
-                transaction_date: new Date().toISOString().split('T')[0],
-                origin_id: id,
-                origin_type: 'os',
-                payment_method: 'Dinheiro',
-              },
-            ]
-          : []),
-      ])
+    await supabase.from('financial_transactions').insert([
+      {
+        user_id: userId,
+        type: 'entrada',
+        status: 'recebido',
+        amount: payload.value,
+        category: 'Serviço',
+        classification: 'Variável',
+        description: `Recebimento OS ${id.split('-')[0]}`,
+        transaction_date: new Date().toISOString().split('T')[0],
+        origin_id: id,
+        origin_type: 'os',
+        payment_method: payload.payment_method,
+      },
+      ...(totalCost > 0
+        ? [
+            {
+              user_id: userId,
+              type: 'saida',
+              status: 'pago',
+              amount: totalCost,
+              category: 'Custo Peças',
+              classification: 'Variável',
+              description: `Custo OS ${id.split('-')[0]}`,
+              transaction_date: new Date().toISOString().split('T')[0],
+              origin_id: id,
+              origin_type: 'os',
+              payment_method: 'Dinheiro',
+            },
+          ]
+        : []),
+    ])
   } else if (isNowPaid && wasPaid) {
     await supabase
       .from('cash_movements')
@@ -118,6 +112,49 @@ async function syncFinancials(
       .eq('origin_id', id)
       .eq('type', 'saida')
   }
+}
+
+async function resolveServices(items: any[], userId: string) {
+  if (!items || items.length === 0) return items
+
+  const resolvedItems = []
+  for (const item of items) {
+    let serviceId = item.service_id
+
+    if (!serviceId && item.description) {
+      const { data: existing } = await supabase
+        .from('services')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('name', item.description)
+        .eq('cost', item.cost || 0)
+        .eq('final_price', item.price || 0)
+        .maybeSingle()
+
+      if (existing) {
+        serviceId = existing.id
+      } else {
+        const { data: newSvc } = await supabase
+          .from('services')
+          .insert({
+            user_id: userId,
+            name: item.description,
+            cost: item.cost || 0,
+            final_price: item.price || 0,
+            status: 'Ativo',
+          })
+          .select('id')
+          .single()
+        if (newSvc) serviceId = newSvc.id
+      }
+    }
+
+    resolvedItems.push({
+      ...item,
+      service_id: serviceId || null,
+    })
+  }
+  return resolvedItems
 }
 
 export async function getOrders(userId: string) {
@@ -163,11 +200,17 @@ export async function createOrder(payload: any, items: any[], userId: string) {
   if (error) throw error
 
   if (items && items.length > 0) {
-    const formattedItems = items.map((i) => ({
-      ...i,
+    const resolvedItems = await resolveServices(items, userId)
+    const formattedItems = resolvedItems.map((i) => ({
+      type: i.type,
+      description: i.description,
+      cost: i.cost,
+      price: i.price,
+      quantity: i.quantity,
       os_id: order.id,
       user_id: userId,
       supplier_id: i.supplier_id === 'NEW' || !i.supplier_id ? null : i.supplier_id,
+      service_id: i.service_id,
     }))
     await supabase.from('os_items').insert(formattedItems)
   }
@@ -209,11 +252,17 @@ export async function updateOrder(id: string, payload: any, items: any[], userId
 
   await supabase.from('os_items').delete().eq('os_id', id)
   if (items && items.length > 0) {
-    const formattedItems = items.map((i) => ({
-      ...i,
+    const resolvedItems = await resolveServices(items, userId)
+    const formattedItems = resolvedItems.map((i) => ({
+      type: i.type,
+      description: i.description,
+      cost: i.cost,
+      price: i.price,
+      quantity: i.quantity,
       os_id: order.id,
       user_id: userId,
       supplier_id: i.supplier_id === 'NEW' || !i.supplier_id ? null : i.supplier_id,
+      service_id: i.service_id,
     }))
     await supabase.from('os_items').insert(formattedItems)
   }

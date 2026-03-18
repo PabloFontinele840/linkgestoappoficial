@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { updateOrder } from '@/services/orders'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -23,6 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { CustomerSelector } from './CustomerSelector'
+import { ServiceAutocomplete } from './ServiceAutocomplete'
 
 export function EditOrderModal({ order, open, onOpenChange, onUpdated }: any) {
   const { user } = useAuth()
@@ -178,9 +179,14 @@ export function EditOrderModal({ order, open, onOpenChange, onUpdated }: any) {
                         </Select>
                       </TableCell>
                       <TableCell>
-                        <Input
+                        <ServiceAutocomplete
                           value={it.description}
-                          onChange={(e) => handleItemChange(i, 'description', e.target.value)}
+                          onChange={(val) => handleItemChange(i, 'description', val)}
+                          onSelectService={(s) => {
+                            handleItemChange(i, 'description', s.name)
+                            handleItemChange(i, 'cost', s.cost)
+                            handleItemChange(i, 'price', s.final_price)
+                          }}
                         />
                       </TableCell>
                       <TableCell>

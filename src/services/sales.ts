@@ -46,36 +46,32 @@ export async function createSale(payload: any, items: any[], userId: string) {
   }
 
   if (sessionId && payload.status === 'Concluída') {
-    await supabase
-      .from('cash_movements')
-      .insert([
-        {
-          session_id: sessionId,
-          user_id: userId,
-          type: 'entrada',
-          amount: payload.final_amount,
-          origin: 'venda',
-          reference_id: sale.id,
-          description: `Venda ${sale.id.split('-')[0]}`,
-          payment_method: payload.payment_method,
-        },
-      ])
-    await supabase
-      .from('financial_transactions')
-      .insert([
-        {
-          user_id: userId,
-          type: 'entrada',
-          status: 'recebido',
-          amount: payload.final_amount,
-          category: 'Venda',
-          classification: 'Variável',
-          description: `Venda ${sale.id.split('-')[0]}`,
-          transaction_date: payload.sale_date,
-          origin_id: sale.id,
-          origin_type: 'venda',
-        },
-      ])
+    await supabase.from('cash_movements').insert([
+      {
+        session_id: sessionId,
+        user_id: userId,
+        type: 'entrada',
+        amount: payload.final_amount,
+        origin: 'venda',
+        reference_id: sale.id,
+        description: `Venda ${sale.id.split('-')[0]}`,
+        payment_method: payload.payment_method,
+      },
+    ])
+    await supabase.from('financial_transactions').insert([
+      {
+        user_id: userId,
+        type: 'entrada',
+        status: 'recebido',
+        amount: payload.final_amount,
+        category: 'Venda',
+        classification: 'Variável',
+        description: `Venda ${sale.id.split('-')[0]}`,
+        transaction_date: payload.sale_date,
+        origin_id: sale.id,
+        origin_type: 'venda',
+      },
+    ])
   }
 
   return sale

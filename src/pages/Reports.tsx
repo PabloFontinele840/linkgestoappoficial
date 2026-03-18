@@ -93,7 +93,7 @@ export default function Reports() {
           <TabsTrigger value="os">Ordens de Serviço</TabsTrigger>
           <TabsTrigger value="finance">Financeiro</TabsTrigger>
           <TabsTrigger value="sales">Vendas</TabsTrigger>
-          <TabsTrigger value="inventory">Estoque</TabsTrigger>
+          <TabsTrigger value="inventory">Serviços</TabsTrigger>
           <TabsTrigger value="exports">Exportações</TabsTrigger>
         </TabsList>
 

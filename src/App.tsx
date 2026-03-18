@@ -11,7 +11,7 @@ import Settings from './pages/Settings'
 import Orders from './pages/Orders'
 import Customers from './pages/Customers'
 import Suppliers from './pages/Suppliers'
-import Inventory from './pages/Inventory'
+import Services from './pages/Services'
 import Finance from './pages/Finance'
 import Sales from './pages/Sales'
 import Reports from './pages/Reports'
@@ -30,7 +30,7 @@ const App = () => {
     '/ordens',
     '/clientes',
     '/fornecedores',
-    '/estoque',
+    '/servicos',
     '/financeiro',
     '/vendas',
     '/relatorios',
@@ -58,7 +58,7 @@ const App = () => {
                   <Route path="/ordens" element={<Orders />} />
                   <Route path="/clientes" element={<Customers />} />
                   <Route path="/fornecedores" element={<Suppliers />} />
-                  <Route path="/estoque" element={<Inventory />} />
+                  <Route path="/servicos" element={<Services />} />
                   <Route path="/financeiro" element={<Finance />} />
                   <Route path="/vendas" element={<Sales />} />
                   <Route path="/relatorios" element={<Reports />} />
