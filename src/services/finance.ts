@@ -13,7 +13,7 @@ export async function getTransactions(userId: string) {
 export async function createTransaction(payload: any, userId: string) {
   const { data, error } = await supabase
     .from('financial_transactions')
-    .insert({ ...payload, user_id: userId })
+    .insert({ ...payload, user_id: userId, origin_type: payload.origin_type || 'manual' })
     .select()
     .single()
   if (error) throw error

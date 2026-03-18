@@ -15,17 +15,6 @@ import {
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
-const CATEGORIES = [
-  'Serviço',
-  'Venda',
-  'Aluguel',
-  'Energia',
-  'Salário',
-  'Fornecedor',
-  'Impostos',
-  'Outros',
-]
-
 export function TransactionForm({
   defaultType,
   onCreated,
@@ -35,14 +24,12 @@ export function TransactionForm({
 }) {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
-
   const actualType = defaultType === 'contas' ? 'saida' : defaultType
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!user) return
     setLoading(true)
-
     const fd = new FormData(e.currentTarget)
     const payload = Object.fromEntries(fd.entries())
     payload.amount = parseFloat(payload.amount as string) || 0
@@ -51,7 +38,7 @@ export function TransactionForm({
       await createTransaction(payload, user.id)
       toast.success('Transação registrada!')
       onCreated()
-    } catch (err) {
+    } catch {
       toast.error('Erro ao registrar transação')
     } finally {
       setLoading(false)
@@ -69,7 +56,7 @@ export function TransactionForm({
         <input type="hidden" name="type" value={actualType} />
         <div className="space-y-2">
           <Label>Descrição</Label>
-          <Input name="description" required placeholder="Ex: Conta de Luz, Venda Tela..." />
+          <Input name="description" required placeholder="Ex: Conta de Luz..." />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -87,18 +74,7 @@ export function TransactionForm({
           </div>
           <div className="space-y-2">
             <Label>Categoria</Label>
-            <Select name="category" defaultValue="Outros">
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {CATEGORIES.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input name="category" defaultValue="Outros" />
           </div>
           <div className="space-y-2">
             <Label>Status</Label>
@@ -131,8 +107,8 @@ export function TransactionForm({
             </Select>
           </div>
           <div className="space-y-2 col-span-2">
-            <Label>Classificação (Fixo / Variável)</Label>
-            <Select name="classification" defaultValue="Variável">
+            <Label>Classificação</Label>
+            <Select name="classification" defaultValue="Fixa">
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
