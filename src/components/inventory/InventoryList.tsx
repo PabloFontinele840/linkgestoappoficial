@@ -51,7 +51,7 @@ export function InventoryList({ onSelect }: { onSelect: (id: string) => void }) 
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar por nome, categoria ou SKU..."
+              placeholder="Buscar por descrição..."
               className="pl-9 bg-background"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -62,18 +62,17 @@ export function InventoryList({ onSelect }: { onSelect: (id: string) => void }) 
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow>
-                <TableHead>SKU</TableHead>
-                <TableHead>Nome</TableHead>
+                <TableHead className="pl-6">Descrição da Peça</TableHead>
                 <TableHead>Categoria</TableHead>
-                <TableHead>Marca/Modelo</TableHead>
-                <TableHead>Quantidade</TableHead>
+                <TableHead>Custo (R$)</TableHead>
+                <TableHead>Estoque</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                     Nenhum item encontrado.
                   </TableCell>
                 </TableRow>
@@ -90,15 +89,19 @@ export function InventoryList({ onSelect }: { onSelect: (id: string) => void }) 
                       )}
                       onClick={() => onSelect(item.id)}
                     >
-                      <TableCell className="text-xs text-muted-foreground">
-                        {item.sku || '-'}
+                      <TableCell className="pl-6 font-medium">
+                        {item.name}{' '}
+                        <span className="text-xs text-muted-foreground ml-2">
+                          {item.device_brand} {item.device_model}
+                        </span>
                       </TableCell>
-                      <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell>{item.category}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {item.device_brand} {item.device_model}
+                      <TableCell>
+                        <Badge variant="secondary" className="font-normal">
+                          {item.category}
+                        </Badge>
                       </TableCell>
-                      <TableCell className={cn('font-medium', isLow && 'text-red-500')}>
+                      <TableCell className="text-muted-foreground">R$ {item.cost_price}</TableCell>
+                      <TableCell className={cn('font-bold', isLow && 'text-red-500')}>
                         {item.quantity}
                       </TableCell>
                       <TableCell>

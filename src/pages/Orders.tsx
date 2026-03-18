@@ -1,62 +1,61 @@
 import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { OrdersList } from '@/components/orders/OrdersList'
-import { NewOrderForm } from '@/components/orders/NewOrderForm'
+import { NewOrderModal } from '@/components/orders/NewOrderModal'
 import { OrderDetails } from '@/components/orders/OrderDetails'
+import { Button } from '@/components/ui/button'
+import { Wrench, Plus } from 'lucide-react'
 
 export default function Orders() {
-  const [activeTab, setActiveTab] = useState('list')
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
-  const handleSelectOrder = (id: string) => {
-    setSelectedOrderId(id)
-    setActiveTab('details')
-  }
-
-  const handleOrderCreated = () => {
-    setActiveTab('list')
+  if (selectedOrderId) {
+    return (
+      <OrderDetails
+        orderId={selectedOrderId}
+        onClose={() => {
+          setSelectedOrderId(null)
+          setRefreshKey((k) => k + 1)
+        }}
+      />
+    )
   }
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-10 animate-fade-in-up">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight mb-1">Ordens de Serviço</h1>
-        <p className="text-muted-foreground">
-          Gerencie e acompanhe todos os reparos da sua assistência.
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex aspect-square size-10 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+            <Wrench className="size-5" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight mb-1">Ordens de Serviço</h1>
+            <p className="text-muted-foreground">
+              Gerencie e acompanhe todos os reparos da sua assistência.
+            </p>
+          </div>
+        </div>
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+        >
+          <Plus className="size-4 mr-2" /> Nova OS
+        </Button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="inline-flex w-auto mb-6 bg-card border border-border/50">
-          <TabsTrigger value="list" onClick={() => setSelectedOrderId(null)}>
-            Lista de OS
-          </TabsTrigger>
-          <TabsTrigger value="new" onClick={() => setSelectedOrderId(null)}>
-            Nova OS
-          </TabsTrigger>
-          {selectedOrderId && <TabsTrigger value="details">Detalhes</TabsTrigger>}
-        </TabsList>
+      <OrdersList key={refreshKey} onSelectOrder={setSelectedOrderId} />
 
-        <TabsContent value="list" className="mt-0">
-          <OrdersList onSelectOrder={handleSelectOrder} />
-        </TabsContent>
-
-        <TabsContent value="new" className="mt-0">
-          <NewOrderForm onCreated={handleOrderCreated} />
-        </TabsContent>
-
-        {selectedOrderId && (
-          <TabsContent value="details" className="mt-0">
-            <OrderDetails
-              orderId={selectedOrderId}
-              onClose={() => {
-                setSelectedOrderId(null)
-                setActiveTab('list')
-              }}
-            />
-          </TabsContent>
-        )}
-      </Tabs>
+      {isModalOpen && (
+        <NewOrderModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          onCreated={() => {
+            setIsModalOpen(false)
+            setRefreshKey((k) => k + 1)
+          }}
+        />
+      )}
     </div>
   )
 }

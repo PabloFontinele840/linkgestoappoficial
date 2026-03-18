@@ -15,6 +15,7 @@ import Inventory from './pages/Inventory'
 import Finance from './pages/Finance'
 import Sales from './pages/Sales'
 import Reports from './pages/Reports'
+import Cashier from './pages/Cashier'
 import Construction from './pages/Construction'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
@@ -24,6 +25,7 @@ import { NAV_ITEMS } from './lib/constants'
 const App = () => {
   const implementedRoutes = [
     '/',
+    '/caixa',
     '/configuracoes',
     '/ordens',
     '/clientes',
@@ -45,13 +47,13 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
 
-              {/* Legacy route cleanup: redirect any /ia attempts to home */}
               <Route path="/ia" element={<Navigate to="/" replace />} />
               <Route path="/ia/*" element={<Navigate to="/" replace />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
                   <Route path="/" element={<Index />} />
+                  <Route path="/caixa" element={<Cashier />} />
                   <Route path="/configuracoes" element={<Settings />} />
                   <Route path="/ordens" element={<Orders />} />
                   <Route path="/clientes" element={<Customers />} />
