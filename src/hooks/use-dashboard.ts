@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { startOfMonth, subMonths, getDaysInMonth, format, isToday } from 'date-fns'
 import { useAuth } from '@/hooks/use-auth'
@@ -8,10 +8,11 @@ export function useDashboardData() {
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
 
-  useEffect(() => {
-    if (!user) return
+  const fetchData = useCallback(
+    async (silent = false) => {
+      if (!user) return
+      if (!silent) setLoading(true)
 
-    async function fetchData() {
       try {
         const now = new Date()
         const startCurrentMonth = startOfMonth(now)
@@ -130,11 +131,15 @@ export function useDashboardData() {
       } catch (error) {
         console.error('Error fetching dashboard data:', error)
       } finally {
-        setLoading(false)
+        if (!silent) setLoading(false)
       }
-    }
-    fetchData()
-  }, [user])
+    },
+    [user],
+  )
 
-  return { data, loading }
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  return { data, loading, refetch: () => fetchData(true) }
 }

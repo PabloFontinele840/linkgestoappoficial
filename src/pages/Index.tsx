@@ -7,9 +7,9 @@ import { useDashboardData } from '@/hooks/use-dashboard'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Index() {
-  const { data, loading } = useDashboardData()
+  const { data, loading, refetch } = useDashboardData()
 
-  if (loading) {
+  if (loading && !data) {
     return (
       <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-10">
         <div>
@@ -55,7 +55,7 @@ export default function Index() {
 
       {/* 2. Middle Section */}
       <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
-        <GoalCard data={data.goal} />
+        <GoalCard data={data.goal} onUpdate={refetch} />
         <RevenueChart data={data.chart} />
       </div>
 
