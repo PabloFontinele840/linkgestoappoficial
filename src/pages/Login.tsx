@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,6 +14,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const { toast } = useToast()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -47,7 +48,11 @@ export default function Login() {
           title: 'Sucesso',
           description: 'Login realizado com sucesso!',
         })
-        navigate('/')
+
+        // Prevent redirects to the removed /ia route if it was stored in location state
+        const from = location.state?.from?.pathname || '/'
+        const safeRedirect = from.startsWith('/ia') ? '/' : from
+        navigate(safeRedirect, { replace: true })
       }
     } catch (err) {
       toast({

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -44,6 +44,10 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+
+              {/* Legacy route cleanup: redirect any /ia attempts to home */}
+              <Route path="/ia" element={<Navigate to="/" replace />} />
+              <Route path="/ia/*" element={<Navigate to="/" replace />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
