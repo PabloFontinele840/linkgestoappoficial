@@ -1,3 +1,5 @@
 {
-  "_versions": {}
+  "_versions": {
+    "functions": 1
+  }
 }
