@@ -1,11 +1,17 @@
 // AVOID UPDATING THIS FILE DIRECTLY. It is automatically generated.
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.4'
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
@@ -123,11 +129,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'auto_models_brand_id_fkey'
-            columns: ['brand_id']
+            foreignKeyName: "auto_models_brand_id_fkey"
+            columns: ["brand_id"]
             isOneToOne: false
-            referencedRelation: 'auto_brands'
-            referencedColumns: ['id']
+            referencedRelation: "auto_brands"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -164,18 +170,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'auto_services_defect_id_fkey'
-            columns: ['defect_id']
+            foreignKeyName: "auto_services_defect_id_fkey"
+            columns: ["defect_id"]
             isOneToOne: false
-            referencedRelation: 'auto_defects'
-            referencedColumns: ['id']
+            referencedRelation: "auto_defects"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'auto_services_model_id_fkey'
-            columns: ['model_id']
+            foreignKeyName: "auto_services_model_id_fkey"
+            columns: ["model_id"]
             isOneToOne: false
-            referencedRelation: 'auto_models'
-            referencedColumns: ['id']
+            referencedRelation: "auto_models"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -227,6 +233,42 @@ export type Database = {
           updated_at?: string
           user_id?: string
           whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      cash_movements: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string
+          id: string
+          origin: string | null
+          payment_method: string | null
+          reference_id: string | null
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description: string
+          id?: string
+          origin?: string | null
+          payment_method?: string | null
+          reference_id?: string | null
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string
+          id?: string
+          origin?: string | null
+          payment_method?: string | null
+          reference_id?: string | null
+          type?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -383,11 +425,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'inventory_items_supplier_id_fkey'
-            columns: ['supplier_id']
+            foreignKeyName: "inventory_items_supplier_id_fkey"
+            columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: 'suppliers'
-            referencedColumns: ['id']
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -424,11 +466,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'inventory_movements_item_id_fkey'
-            columns: ['item_id']
+            foreignKeyName: "inventory_movements_item_id_fkey"
+            columns: ["item_id"]
             isOneToOne: false
-            referencedRelation: 'inventory_items'
-            referencedColumns: ['id']
+            referencedRelation: "inventory_items"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -458,6 +500,60 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      os_items: {
+        Row: {
+          cost: number | null
+          created_at: string | null
+          description: string
+          id: string
+          os_id: string
+          price: number | null
+          quantity: number | null
+          supplier_id: string | null
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string | null
+          description: string
+          id?: string
+          os_id: string
+          price?: number | null
+          quantity?: number | null
+          supplier_id?: string | null
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          os_id?: string
+          price?: number | null
+          quantity?: number | null
+          supplier_id?: string | null
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_items_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "os_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
@@ -558,11 +654,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'sale_items_sale_id_fkey'
-            columns: ['sale_id']
+            foreignKeyName: "sale_items_sale_id_fkey"
+            columns: ["sale_id"]
             isOneToOne: false
-            referencedRelation: 'sales'
-            referencedColumns: ['id']
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -614,11 +710,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'sales_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "sales_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'customers'
-            referencedColumns: ['id']
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -649,11 +745,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'service_order_attachments_service_order_id_fkey'
-            columns: ['service_order_id']
+            foreignKeyName: "service_order_attachments_service_order_id_fkey"
+            columns: ["service_order_id"]
             isOneToOne: false
-            referencedRelation: 'service_orders'
-            referencedColumns: ['id']
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -684,11 +780,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'service_order_logs_service_order_id_fkey'
-            columns: ['service_order_id']
+            foreignKeyName: "service_order_logs_service_order_id_fkey"
+            columns: ["service_order_id"]
             isOneToOne: false
-            referencedRelation: 'service_orders'
-            referencedColumns: ['id']
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -707,6 +803,8 @@ export type Database = {
           id: string
           is_value_to_be_defined: boolean | null
           needs_parts: boolean | null
+          payment_method: string | null
+          payment_status: string | null
           priority: string | null
           product_id: string | null
           reported_problem: string | null
@@ -734,6 +832,8 @@ export type Database = {
           id?: string
           is_value_to_be_defined?: boolean | null
           needs_parts?: boolean | null
+          payment_method?: string | null
+          payment_status?: string | null
           priority?: string | null
           product_id?: string | null
           reported_problem?: string | null
@@ -761,6 +861,8 @@ export type Database = {
           id?: string
           is_value_to_be_defined?: boolean | null
           needs_parts?: boolean | null
+          payment_method?: string | null
+          payment_status?: string | null
           priority?: string | null
           product_id?: string | null
           reported_problem?: string | null
@@ -776,25 +878,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'service_orders_customer_id_fkey'
-            columns: ['customer_id']
+            foreignKeyName: "service_orders_customer_id_fkey"
+            columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: 'customers'
-            referencedColumns: ['id']
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'service_orders_product_id_fkey'
-            columns: ['product_id']
+            foreignKeyName: "service_orders_product_id_fkey"
+            columns: ["product_id"]
             isOneToOne: false
-            referencedRelation: 'products'
-            referencedColumns: ['id']
+            referencedRelation: "products"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'service_orders_service_id_fkey'
-            columns: ['service_id']
+            foreignKeyName: "service_orders_service_id_fkey"
+            columns: ["service_id"]
             isOneToOne: false
-            referencedRelation: 'services'
-            referencedColumns: ['id']
+            referencedRelation: "services"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -940,31 +1042,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -973,23 +1077,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -998,23 +1102,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1023,36 +1127,36 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
@@ -1060,6 +1164,7 @@ export const Constants = {
     Enums: {},
   },
 } as const
+
 
 // ====== DATABASE EXTENDED CONTEXT (auto-generated) ======
 // This section contains actual PostgreSQL column types, constraints, RLS policies,
@@ -1125,6 +1230,16 @@ export const Constants = {
 //   slug: text (nullable)
 //   auto_active: boolean (nullable, default: false)
 //   whatsapp_number: text (nullable)
+// Table: cash_movements
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   type: text (nullable)
+//   amount: numeric (not null)
+//   origin: text (nullable)
+//   reference_id: uuid (nullable)
+//   description: text (not null)
+//   payment_method: text (nullable)
+//   created_at: timestamp with time zone (nullable, default: now())
 // Table: customers
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -1186,6 +1301,17 @@ export const Constants = {
 //   target_value: numeric (not null, default: 0)
 //   created_at: timestamp with time zone (not null, default: now())
 //   updated_at: timestamp with time zone (not null, default: now())
+// Table: os_items
+//   id: uuid (not null, default: gen_random_uuid())
+//   os_id: uuid (not null)
+//   user_id: uuid (not null)
+//   type: text (nullable)
+//   description: text (not null)
+//   supplier_id: uuid (nullable)
+//   cost: numeric (nullable, default: 0)
+//   price: numeric (nullable, default: 0)
+//   quantity: integer (nullable, default: 1)
+//   created_at: timestamp with time zone (nullable, default: now())
 // Table: products
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -1267,6 +1393,8 @@ export const Constants = {
 //   warranty_days: integer (nullable, default: 0)
 //   warranty_expiry_date: timestamp with time zone (nullable)
 //   finished_at: timestamp with time zone (nullable)
+//   payment_status: text (nullable, default: 'Pendente'::text)
+//   payment_method: text (nullable)
 // Table: services
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (not null)
@@ -1325,6 +1453,11 @@ export const Constants = {
 //   UNIQUE business_settings_slug_key: UNIQUE (slug)
 //   FOREIGN KEY business_settings_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 //   UNIQUE business_settings_user_id_key: UNIQUE (user_id)
+// Table: cash_movements
+//   CHECK cash_movements_origin_check: CHECK ((origin = ANY (ARRAY['os'::text, 'venda'::text, 'manual'::text])))
+//   PRIMARY KEY cash_movements_pkey: PRIMARY KEY (id)
+//   CHECK cash_movements_type_check: CHECK ((type = ANY (ARRAY['entrada'::text, 'saida'::text])))
+//   FOREIGN KEY cash_movements_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: customers
 //   PRIMARY KEY customers_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY customers_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
@@ -1346,6 +1479,12 @@ export const Constants = {
 //   PRIMARY KEY monthly_goals_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY monthly_goals_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 //   UNIQUE monthly_goals_user_id_month_year_key: UNIQUE (user_id, month_year)
+// Table: os_items
+//   FOREIGN KEY os_items_os_id_fkey: FOREIGN KEY (os_id) REFERENCES service_orders(id) ON DELETE CASCADE
+//   PRIMARY KEY os_items_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY os_items_supplier_id_fkey: FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+//   CHECK os_items_type_check: CHECK ((type = ANY (ARRAY['Peça'::text, 'Serviço'::text, 'Mão de obra'::text])))
+//   FOREIGN KEY os_items_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: products
 //   PRIMARY KEY products_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY products_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
@@ -1427,6 +1566,16 @@ export const Constants = {
 //   Policy "Users can update own settings" (UPDATE, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
 //     WITH CHECK: (user_id = auth.uid())
+// Table: cash_movements
+//   Policy "Users can delete own cash_movements" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own cash_movements" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own cash_movements" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own cash_movements" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: customers
 //   Policy "Users can access own customers" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
@@ -1463,6 +1612,16 @@ export const Constants = {
 // Table: monthly_goals
 //   Policy "Users can access own goals" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
+// Table: os_items
+//   Policy "Users can delete own os_items" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can insert own os_items" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: (user_id = auth.uid())
+//   Policy "Users can select own os_items" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//   Policy "Users can update own os_items" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 // Table: products
 //   Policy "Users can access own products" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (user_id = auth.uid())
@@ -1517,7 +1676,7 @@ export const Constants = {
 //   AS $function$
 //   BEGIN
 //     RETURN QUERY
-//     SELECT
+//     SELECT 
 //       so.id,
 //       split_part(so.id::text, '-', 1) as short_id,
 //       so.status,
@@ -1538,7 +1697,7 @@ export const Constants = {
 //     LIMIT 10;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_inventory_movement()
 //   CREATE OR REPLACE FUNCTION public.handle_inventory_movement()
 //    RETURNS trigger
@@ -1559,7 +1718,7 @@ export const Constants = {
 //       RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_new_user()
 //   CREATE OR REPLACE FUNCTION public.handle_new_user()
 //    RETURNS trigger
@@ -1569,14 +1728,14 @@ export const Constants = {
 //   BEGIN
 //     INSERT INTO public.profiles (id, full_name, store_name)
 //     VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name', 'Minha Assistência');
-//
+//   
 //     INSERT INTO public.business_settings (user_id, business_name)
 //     VALUES (NEW.id, 'Minha Assistência');
-//
+//   
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_os_created()
 //   CREATE OR REPLACE FUNCTION public.handle_os_created()
 //    RETURNS trigger
@@ -1589,7 +1748,7 @@ export const Constants = {
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_os_finalized()
 //   CREATE OR REPLACE FUNCTION public.handle_os_finalized()
 //    RETURNS trigger
@@ -1611,7 +1770,7 @@ export const Constants = {
 //         'OS ' || split_part(NEW.id::text, '-', 1),
 //         NOW()
 //       );
-//
+//   
 //       -- Set finished_at and warranty_expiry_date if not set
 //       IF NEW.finished_at IS NULL THEN
 //         NEW.finished_at := NOW();
@@ -1620,26 +1779,58 @@ export const Constants = {
 //         END IF;
 //       END IF;
 //     END IF;
-//
+//   
 //     -- Create log entry
 //     IF NEW.status != OLD.status THEN
 //       INSERT INTO public.service_order_logs (service_order_id, user_id, old_status, new_status)
 //       VALUES (NEW.id, NEW.user_id, OLD.status, NEW.status);
 //     END IF;
-//
+//   
 //     -- Always update updated_at
 //     NEW.updated_at := NOW();
-//
+//   
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
+// FUNCTION handle_os_payment()
+//   CREATE OR REPLACE FUNCTION public.handle_os_payment()
+//    RETURNS trigger
+//    LANGUAGE plpgsql
+//    SECURITY DEFINER
+//   AS $function$
+//   BEGIN
+//     IF NEW.payment_status = 'Pago' AND (OLD.payment_status IS NULL OR OLD.payment_status != 'Pago') THEN
+//       INSERT INTO public.cash_movements (user_id, type, amount, origin, reference_id, description, payment_method)
+//       VALUES (NEW.user_id, 'entrada', COALESCE(NEW.value, 0), 'os', NEW.id, 'OS ' || split_part(NEW.id::text, '-', 1), NEW.payment_method);
+//     END IF;
+//     RETURN NEW;
+//   END;
+//   $function$
+//   
+// FUNCTION handle_os_payment_insert()
+//   CREATE OR REPLACE FUNCTION public.handle_os_payment_insert()
+//    RETURNS trigger
+//    LANGUAGE plpgsql
+//    SECURITY DEFINER
+//   AS $function$
+//   BEGIN
+//     IF NEW.payment_status = 'Pago' THEN
+//       INSERT INTO public.cash_movements (user_id, type, amount, origin, reference_id, description, payment_method)
+//       VALUES (NEW.user_id, 'entrada', COALESCE(NEW.value, 0), 'os', NEW.id, 'OS ' || split_part(NEW.id::text, '-', 1), NEW.payment_method);
+//     END IF;
+//     RETURN NEW;
+//   END;
+//   $function$
+//   
 
 // --- TRIGGERS ---
 // Table: inventory_movements
 //   on_inventory_movement: CREATE TRIGGER on_inventory_movement AFTER INSERT ON public.inventory_movements FOR EACH ROW EXECUTE FUNCTION handle_inventory_movement()
 // Table: service_orders
 //   on_os_created: CREATE TRIGGER on_os_created AFTER INSERT ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_created()
+//   on_os_payment_status_change: CREATE TRIGGER on_os_payment_status_change AFTER UPDATE ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_payment()
+//   on_os_payment_status_insert: CREATE TRIGGER on_os_payment_status_insert AFTER INSERT ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_payment_insert()
 //   on_os_status_change: CREATE TRIGGER on_os_status_change BEFORE UPDATE ON public.service_orders FOR EACH ROW EXECUTE FUNCTION handle_os_finalized()
 
 // --- INDEXES ---
@@ -1650,3 +1841,4 @@ export const Constants = {
 //   CREATE UNIQUE INDEX business_settings_user_id_key ON public.business_settings USING btree (user_id)
 // Table: monthly_goals
 //   CREATE UNIQUE INDEX monthly_goals_user_id_month_year_key ON public.monthly_goals USING btree (user_id, month_year)
+
